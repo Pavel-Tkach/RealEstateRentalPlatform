@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: PropertyService
+
+  data:
+    mongodb:
+      port: 2701
+      host: localhost
+      database: property-db
+
+server:
+  port: 10000

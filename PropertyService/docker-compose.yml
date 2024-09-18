@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  mongo-property-service:
+    container_name: property-service-database
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: property-db
+    ports:
+      - "2701:27017"
+
+  mongo-booking-service:
+    container_name: booking-service-database
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: booking-db
+    ports:
+      - "2702:27017"
