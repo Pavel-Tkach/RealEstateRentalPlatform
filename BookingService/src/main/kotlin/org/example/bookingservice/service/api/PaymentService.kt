@@ -6,7 +6,7 @@ interface PaymentService {
 
     suspend fun findAllByTenantId(tenantId: String) : List<PaymentDto>
 
-    suspend fun findById(bookingId: String, tenantId: String): PaymentDto
+    suspend fun findById(tenantId: String): PaymentDto
 
     suspend fun create(bookingId: String, paymentDto: PaymentDto): PaymentDto
 }

@@ -3,6 +3,7 @@ package org.example.bookingservice.dto
 import org.bson.types.ObjectId
 import org.example.bookingservice.document.enums.PaymentStatus
 import java.math.BigDecimal
+import java.time.Instant
 import java.util.*
 
 data class PaymentDto(
@@ -13,7 +14,7 @@ data class PaymentDto(
 
     val amount: BigDecimal,
 
-    var status: PaymentStatus,
+    var status: PaymentStatus? = PaymentStatus.PENDING,
 
-    val paymentDate: Date,
+    val paymentDate: Date? = Date.from(Instant.now()),
 )

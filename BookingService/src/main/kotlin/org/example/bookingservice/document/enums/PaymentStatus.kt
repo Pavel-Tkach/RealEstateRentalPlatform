@@ -2,5 +2,5 @@ package org.example.bookingservice.document.enums
 
 enum class PaymentStatus {
 
-    PAID, FAILED
+    PAID, FAILED, PENDING
 }

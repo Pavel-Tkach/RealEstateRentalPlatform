@@ -26,10 +26,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("org.mapstruct:mapstruct:1.6.0")
+    compileOnly("org.mapstruct:mapstruct:1.6.0")
     kapt("org.mapstruct:mapstruct-processor:1.6.0")
-    compileOnly("org.projectlombok:lombok")
-    kapt("org.projectlombok:lombok")
 }
 
 kotlin {

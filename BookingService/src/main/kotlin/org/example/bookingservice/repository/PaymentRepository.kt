@@ -9,5 +9,5 @@ interface PaymentRepository: CoroutineCrudRepository<Payment, String> {
 
     suspend fun findAllByTenantId(tenantId: String): List<Payment>
 
-    suspend fun findByBookingIdAndTenantId(bookingId: String, tenantId: String): Payment?
+    suspend fun findByTenantId(tenantId: String): Payment?
 }

@@ -47,7 +47,6 @@ class BookingServiceImpl(
 
     @Transactional
     override suspend fun create(bookingDto: BookingDto): BookingDto {
-        // todo оформление бронирования, подсчет цены и оформление ожидания оплаты
         val propertyDto = withContext(Dispatchers.IO) {
             propertyClient.findById(bookingDto.propertyId)
         }
@@ -55,7 +54,7 @@ class BookingServiceImpl(
         val totalPrice = calculateTotalPriceForBooking(bookingDto, pricePerNight)
         val booking = bookingMapper.toDocument(bookingDto)
         booking.totalPrice = totalPrice
-        booking.status = BookingStatus.PENDING
+        booking.status = BookingStatus.AWAIT_PAYMENT
         val savedBooking = bookingRepository.save(booking)
 
         return bookingMapper.toDto(savedBooking)

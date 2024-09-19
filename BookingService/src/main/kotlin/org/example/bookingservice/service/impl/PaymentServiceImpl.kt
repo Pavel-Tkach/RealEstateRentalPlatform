@@ -14,6 +14,7 @@ import org.example.bookingservice.repository.PaymentRepository
 import org.example.bookingservice.service.api.PaymentService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 
 @Service
 class PaymentServiceImpl(
@@ -29,31 +30,33 @@ class PaymentServiceImpl(
             .toList()
     }
 
-    override suspend fun findById(bookingId: String, tenantId: String): PaymentDto {
-        val payment = paymentRepository.findByBookingIdAndTenantId(bookingId, tenantId)
-            ?: throw PaymentNotFoundException("Payment for booking with id $bookingId not found")
+    override suspend fun findById(tenantId: String): PaymentDto {
+        val payment = paymentRepository.findByTenantId(tenantId)
+            ?: throw PaymentNotFoundException("Payment for user with id $tenantId not found")
 
         return paymentMapper.toDto(payment)
     }
 
     @Transactional
     override suspend fun create(bookingId: String, paymentDto: PaymentDto): PaymentDto {
-        //todo если достаточно средств, то изменение статуса на PAID и подтверждение бронирования
-        //todo обновление Property (устновка isFree = false)
         val booking = (bookingRepository.findById(bookingId)
             ?: throw BookingNotFoundException("Booking with id $bookingId not found"))
-        if (booking.totalPrice <= paymentDto.amount) {
-            //todo списание средств со счета арендатора
+        val change = paymentDto.amount - booking.totalPrice
+        //todo сделать возврат сдачи пользователю
+        if (change >= BigDecimal.ZERO) {
             paymentDto.status = PaymentStatus.PAID
             booking.status = BookingStatus.CONFIRMED
             bookingRepository.save(booking)
             val propertyDto = withContext(Dispatchers.IO) {
                 propertyClient.findById(booking.propertyId)
             }
-            propertyDto.isFree = false
+            propertyDto.free = false
             propertyClient.run { update(propertyDto) }
+        } else {
+            paymentDto.status = PaymentStatus.FAILED
+            booking.status = BookingStatus.CANCELLED
+            bookingRepository.save(booking)
         }
-
         val payment = paymentMapper.toDocument(paymentDto)
         val savedPayment = paymentRepository.save(payment)
 

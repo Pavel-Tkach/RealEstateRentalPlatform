@@ -18,21 +18,9 @@ class BookingController(
         return bookingService.findAllByTenantId(tenantId)
     }
 
-    @GetMapping("/payments")
-    suspend fun findAllPayments(@RequestParam tenantId: String): List<PaymentDto> {
-        return paymentService.findAllByTenantId(tenantId)
-    }
-
     @GetMapping("/{bookingId}")
     suspend fun findBookingById(@PathVariable bookingId: String): BookingDto {
         return bookingService.findById(bookingId)
-    }
-
-    @GetMapping("/{bookingId}/payments/{paymentId}")
-    suspend fun findPaymentById(@PathVariable bookingId: String,
-                                @PathVariable paymentId: String,
-                                @RequestParam tenantId: String,): PaymentDto {
-        return paymentService.findById(bookingId, tenantId)
     }
 
     @PostMapping

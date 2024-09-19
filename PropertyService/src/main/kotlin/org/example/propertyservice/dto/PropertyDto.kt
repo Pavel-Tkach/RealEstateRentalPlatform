@@ -20,5 +20,5 @@ data class PropertyDto(
 
     val ownerId: String,
 
-    val isFree: Boolean,
+    val free: Boolean,
 )

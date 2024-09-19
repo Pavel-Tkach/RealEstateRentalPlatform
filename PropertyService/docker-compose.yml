@@ -16,3 +16,12 @@ services:
       MONGO_INITDB_DATABASE: booking-db
     ports:
       - "2702:27017"
+
+  postgres0user-service:
+    image: postgres
+    ports:
+      - "5555:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=user-db

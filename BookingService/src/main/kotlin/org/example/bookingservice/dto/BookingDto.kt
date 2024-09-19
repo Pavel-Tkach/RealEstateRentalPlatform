@@ -17,7 +17,7 @@ data class BookingDto(
 
     val endDate: Date,
 
-    val totalPrice: BigDecimal,
+    val totalPrice: BigDecimal? = BigDecimal.ZERO,
 
-    val status: BookingStatus,
+    val status: BookingStatus? = BookingStatus.PENDING,
 )
