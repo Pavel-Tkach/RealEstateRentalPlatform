@@ -6,6 +6,8 @@ COPY build.gradle.kts gradlew gradlew.bat settings.gradle.kts ./
 COPY ./gradle ./gradle
 COPY ./src ./src
 
+RUN chmod +x gradlew
+
 RUN ./gradlew build --no-daemon
 
 FROM openjdk:17.0.2

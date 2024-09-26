@@ -13,7 +13,7 @@ services:
     container_name: property-service-application
     build: .
     ports:
-      - "8080:10000"
+      - "8080:8080"
 
   mongo-booking-service:
     container_name: booking-service-database
