@@ -1,3 +1,5 @@
 package org.example.bookingservice.exception
 
-class PaymentNotFoundException(message: String?) : RuntimeException(message)
+class PaymentNotFoundException(
+    override val message: String? = null
+) : RuntimeException()

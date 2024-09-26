@@ -1,14 +1,13 @@
-package org.example.bookingservice.service.impl
+package org.example.bookingservice.service
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.example.bookingservice.client.PropertyClient
-import org.example.bookingservice.document.enums.BookingStatus
+import org.example.bookingservice.document.Booking
 import org.example.bookingservice.dto.BookingDto
 import org.example.bookingservice.exception.BookingNotFoundException
 import org.example.bookingservice.mapper.BookingMapper
 import org.example.bookingservice.repository.BookingRepository
-import org.example.bookingservice.service.api.BookingService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
@@ -16,13 +15,13 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 @Service
-class BookingServiceImpl(
+class BookingService(
     private val bookingRepository: BookingRepository,
     private val bookingMapper: BookingMapper,
     private val propertyClient: PropertyClient,
-    ) : BookingService {
+    ) {
 
-    override suspend fun findAllByTenantId(tenantId: String,): List<BookingDto> {
+    suspend fun findAllByTenantId(tenantId: String,): List<BookingDto> {
         val bookingsByTenantId = bookingRepository.findAllByTenantId(tenantId)
 
         return bookingsByTenantId
@@ -30,7 +29,7 @@ class BookingServiceImpl(
             .toList()
     }
 
-    override suspend fun findById(bookingId: String,): BookingDto {
+    suspend fun findById(bookingId: String,): BookingDto {
         val booking = (bookingRepository.findById(bookingId)
             ?: throw BookingNotFoundException("Booking with id $bookingId not found"))
 
@@ -38,7 +37,7 @@ class BookingServiceImpl(
     }
 
     @Transactional
-    override suspend fun create(bookingDto: BookingDto,): BookingDto {
+    suspend fun create(bookingDto: BookingDto,): BookingDto {
         val propertyDto = withContext(Dispatchers.IO) {
             propertyClient.findById(bookingDto.propertyId)
         }
@@ -46,14 +45,14 @@ class BookingServiceImpl(
         val totalPrice = calculateTotalPriceForBooking(bookingDto, pricePerNight)
         val booking = bookingMapper.toDocument(bookingDto)
         booking.totalPrice = totalPrice
-        booking.status = BookingStatus.AWAIT_PAYMENT
+        booking.status = Booking.BookingStatus.AWAIT_PAYMENT
         val savedBooking = bookingRepository.save(booking)
 
         return bookingMapper.toDto(savedBooking)
     }
 
     @Transactional
-    override suspend fun deleteById(bookingId: String,) {
+    suspend fun deleteById(bookingId: String,) {
         bookingRepository.deleteById(bookingId)
     }
 

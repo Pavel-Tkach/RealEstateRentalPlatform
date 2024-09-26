@@ -3,15 +3,12 @@ spring:
     name: BookingService
   data:
     mongodb:
-      port: 2702
-      host: localhost
+      port: 27017
+      host: mongo-booking-service
       database: booking-db
   cloud:
     openfeign:
       client:
         config:
           property:
-            url: http://localhost:10000/properties
-
-server:
-  port: 10001
+            url: http://property-service:8080/properties

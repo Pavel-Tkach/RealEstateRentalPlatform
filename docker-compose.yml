@@ -11,7 +11,7 @@ services:
 
   property-service:
     container_name: property-service-application
-    build: .
+    build: ./PropertyService
     ports:
       - "8080:8080"
 
@@ -22,3 +22,9 @@ services:
       MONGO_INITDB_DATABASE: booking-db
     ports:
       - "2702:27017"
+
+  booking-service:
+    container_name: booking-service-application
+    build: ./BookingService
+    ports:
+      - "8081:8080"

@@ -1,3 +1,5 @@
 package org.example.bookingservice.exception
 
-class BookingNotFoundException(message: String?) : RuntimeException(message)
+class BookingNotFoundException(
+    override val message: String? = null
+) : RuntimeException()
