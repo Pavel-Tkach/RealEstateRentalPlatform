@@ -22,15 +22,7 @@ class BookingServiceImpl(
     private val propertyClient: PropertyClient,
     ) : BookingService {
 
-    override suspend fun findAll(tenantId: String): List<BookingDto> {
-        val bookings = bookingRepository.findAllByTenantId(tenantId)
-
-        return bookings
-            .map { booking -> bookingMapper.toDto(booking) }
-            .toList()
-    }
-
-    override suspend fun findAllByTenantId(tenantId: String): List<BookingDto> {
+    override suspend fun findAllByTenantId(tenantId: String,): List<BookingDto> {
         val bookingsByTenantId = bookingRepository.findAllByTenantId(tenantId)
 
         return bookingsByTenantId
@@ -38,7 +30,7 @@ class BookingServiceImpl(
             .toList()
     }
 
-    override suspend fun findById(bookingId: String): BookingDto {
+    override suspend fun findById(bookingId: String,): BookingDto {
         val booking = (bookingRepository.findById(bookingId)
             ?: throw BookingNotFoundException("Booking with id $bookingId not found"))
 
@@ -46,7 +38,7 @@ class BookingServiceImpl(
     }
 
     @Transactional
-    override suspend fun create(bookingDto: BookingDto): BookingDto {
+    override suspend fun create(bookingDto: BookingDto,): BookingDto {
         val propertyDto = withContext(Dispatchers.IO) {
             propertyClient.findById(bookingDto.propertyId)
         }
@@ -61,11 +53,11 @@ class BookingServiceImpl(
     }
 
     @Transactional
-    override suspend fun deleteById(bookingId: String) {
+    override suspend fun deleteById(bookingId: String,) {
         bookingRepository.deleteById(bookingId)
     }
 
-    private suspend fun calculateTotalPriceForBooking(bookingDto: BookingDto, pricePerNight: BigDecimal): BigDecimal {
+    private suspend fun calculateTotalPriceForBooking(bookingDto: BookingDto, pricePerNight: BigDecimal,): BigDecimal {
         val startDate = bookingDto.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val endDate = bookingDto.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val amountDays = ChronoUnit.DAYS.between(startDate, endDate)

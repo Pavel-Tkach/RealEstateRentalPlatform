@@ -12,8 +12,6 @@ spring:
         config:
           property:
             url: http://localhost:10000/properties
-#          user:
-#            url: http://localhost:10002/users
 
 server:
   port: 10001

@@ -4,9 +4,9 @@ import org.example.bookingservice.dto.PaymentDto
 
 interface PaymentService {
 
-    suspend fun findAllByTenantId(tenantId: String) : List<PaymentDto>
+    suspend fun findAllByTenantId(tenantId: String,) : List<PaymentDto>
 
-    suspend fun findById(tenantId: String): PaymentDto
+    suspend fun findById(tenantId: String,): PaymentDto
 
-    suspend fun create(bookingId: String, paymentDto: PaymentDto): PaymentDto
+    suspend fun create(bookingId: String, paymentDto: PaymentDto,): PaymentDto
 }
