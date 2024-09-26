@@ -1,36 +1,41 @@
 package org.example.propertyservice.contoller
 
 import org.example.propertyservice.dto.PropertyDto
-import org.example.propertyservice.service.api.PropertyService
-import org.springframework.web.bind.annotation.*
+import org.example.propertyservice.service.PropertyService
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/properties")
 class PropertyController(
-   private val propertyService: PropertyService,
+    private val propertyService: PropertyService,
 ) {
 
-    @GetMapping
+    @GetMapping("/properties")
     suspend fun findAll(): List<PropertyDto> {
         return propertyService.findAll()
     }
 
-    @GetMapping("/{propertyId}")
+    @GetMapping("/properties/{propertyId}")
     suspend fun findById(@PathVariable propertyId: String,): PropertyDto {
         return propertyService.findById(propertyId)
     }
 
-    @PostMapping
+    @PostMapping("/properties")
     suspend fun create(@RequestBody propertyDto: PropertyDto,): PropertyDto {
         return propertyService.create(propertyDto)
     }
 
-    @PutMapping
+    @PutMapping("properties")
     suspend fun update(@RequestBody propertyDto: PropertyDto,) {
         propertyService.update(propertyDto)
     }
 
-    @DeleteMapping("/{propertyId}")
+    @DeleteMapping("/properties/{propertyId}")
     suspend fun deleteById(@PathVariable propertyId: String,) {
         propertyService.deleteById(propertyId)
     }

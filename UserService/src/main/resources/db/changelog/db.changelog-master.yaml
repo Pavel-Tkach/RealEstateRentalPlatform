@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: migrations/create-user-table.sql
+  - include:
+      file: migrations/insert-user-table.sql
