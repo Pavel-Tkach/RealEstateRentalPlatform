@@ -1,24 +1,26 @@
 package org.example.userservice.entity
 
 import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
-import java.time.OffsetDateTime
+import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.Field
+import java.util.*
 
-@Table(name = "\"user\"")
+@Document("user")
 class User(
     @Id
-    val id: Long?,
+    val id: String?,
     val firstname: String,
     val lastname: String,
     val email: String,
     val password: String,
     val phone: String,
-    val birthDate: OffsetDateTime,
+    @Field(value = "birth_date")
+    val birthDate: Date,
+    var roles: List<RoleType> = emptyList(),
 ) {
 
     enum class RoleType {
-        ROLE_TENANT,
-        ROLE_LANDLORD,
+        ROLE_USER,
         ROLE_ADMIN,
     }
 }

@@ -1,14 +1,11 @@
 spring:
   application:
     name: user-service
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5555/user-db
-    username: postgres
-    password: postgres
-  flyway:
-    url: jdbc:postgresql://localhost:5555/user-db
-    user: postgres
-    password: postgres
+  data:
+    mongodb:
+      port: 2703
+      host: localhost
+      database: user-db
 
 server:
   port: 9821

@@ -1,6 +1,7 @@
 package org.example.userservice.controller
 
 import org.example.userservice.dto.UserDto
+import org.example.userservice.dto.UserUpdateDto
 import org.example.userservice.service.UserService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
-import java.util.UUID
 
 @RestController
 class UserController(
@@ -19,17 +18,17 @@ class UserController(
 ) {
 
     @GetMapping("/users")
-    suspend fun findAll(): Mono<List<UserDto>> = userService.findAll()
+    suspend fun findAll(): List<UserDto> = userService.findAll()
 
     @GetMapping("/users/search")
-    suspend fun findByEmail(@RequestParam email: String): Mono<UserDto> = userService.findByEmail(email)
+    suspend fun findByEmail(@RequestParam email: String): UserDto = userService.findByEmail(email)
 
     @PostMapping("/users")
-    suspend fun create(@RequestBody userDto: UserDto,): Mono<UserDto> = userService.create(userDto)
+    suspend fun create(@RequestBody userUpdateDto: UserUpdateDto,): UserUpdateDto = userService.create(userUpdateDto)
 
     @PutMapping("/users")
-    suspend fun update(@RequestBody userDto: UserDto,) = userService.update(userDto)
+    suspend fun update(@RequestBody userUpdateDto: UserUpdateDto,): UserUpdateDto = userService.update(userUpdateDto)
 
     @DeleteMapping("/users/{userId}")
-    suspend fun deleteById(@PathVariable userId: UUID,) = userService.deleteById(userId)
+    suspend fun deleteById(@PathVariable userId: String,) = userService.deleteById(userId)
 }
