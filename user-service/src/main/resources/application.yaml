@@ -3,9 +3,6 @@ spring:
     name: user-service
   data:
     mongodb:
-      port: 2703
-      host: localhost
+      port: 27017
+      host: mongo-user-service
       database: user-db
-
-server:
-  port: 9821

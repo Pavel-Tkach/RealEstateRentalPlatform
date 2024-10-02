@@ -29,12 +29,16 @@ services:
     ports:
       - "8081:8080"
   
-  postgres-user-service:
+  mongo-user-service:
     container_name: user-service-database
-    image: postgres
-    ports:
-      - "5555:5432"
+    image: mongo
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=user-db
+      MONGO_INITDB_DATABASE: user-db
+    ports:
+      - "2703:27017"
+  
+  user-service:
+    container_name: user-service-application
+    build: ./user-service
+    ports:
+      - "8082:8080"
