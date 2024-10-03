@@ -3,12 +3,20 @@ spring:
     name: BookingService
   data:
     mongodb:
-      port: 27017
-      host: mongo-booking-service
+      port: ${DB_PORT:2702}
+      host: ${BOOKING_DB_HOST:localhost}
       database: booking-db
   cloud:
     openfeign:
       client:
         config:
           property:
-            url: http://property-service:8080/properties
+            url: ${PROPERTY_FEIGN_CLIENT_URL:http://localhost:8080/properties}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8083/eureka/}
+
+server:
+  port: ${BOOKING_PORT:8081}
