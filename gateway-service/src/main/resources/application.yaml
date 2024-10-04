@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: property-service-route
+          uri: lb://property-service
+          predicates:
+            - Path=/properties
+        - id: user-service-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users
+        - id: booking-service-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings,/payments
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8083/eureka/
+
+server:
+  port: 8084
