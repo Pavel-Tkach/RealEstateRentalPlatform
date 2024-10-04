@@ -1,8 +1,7 @@
 package org.example.userservice.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.OffsetDateTime
-import java.util.Date
+import java.util.*
 
 class UserDto(
     val id: String?,

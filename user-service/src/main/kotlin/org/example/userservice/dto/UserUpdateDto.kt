@@ -1,8 +1,7 @@
 package org.example.userservice.dto
 
-import org.example.userservice.entity.User
-import java.time.OffsetDateTime
-import java.util.Date
+import org.example.userservice.document.User
+import java.util.*
 
 class UserUpdateDto(
     val id: String?,

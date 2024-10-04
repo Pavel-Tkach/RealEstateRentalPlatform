@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import org.example.userservice.dto.UserDto
 import org.example.userservice.dto.UserUpdateDto
-import org.example.userservice.entity.User
+import org.example.userservice.exception.UserNotFoundException
 import org.example.userservice.mapper.UserMapper
 import org.example.userservice.mapper.UserUpdateMapper
 import org.example.userservice.repository.UserRepository
@@ -23,6 +23,7 @@ class UserService(
 
     suspend fun findByEmail(email: String): UserDto {
         val user = userRepository.findByEmail(email)
+            ?: throw UserNotFoundException("User with email $email not found")
 
         return userMapper.toDto(user)
     }

@@ -1,9 +1,9 @@
-package org.example.userservice.entity
+package org.example.userservice.document
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
-import java.util.*
+import java.util.Date
 
 @Document("user")
 class User(
