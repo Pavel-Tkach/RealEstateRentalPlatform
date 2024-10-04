@@ -1,7 +1,9 @@
 package org.example.bookingservice.service
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.withContext
+import org.example.bookingservice.client.BankCardClient
 import org.example.bookingservice.client.PropertyClient
 import org.example.bookingservice.document.Booking
 import org.example.bookingservice.document.Payment
@@ -21,6 +23,7 @@ class PaymentService(
     private val paymentRepository: PaymentRepository,
     private val paymentMapper: PaymentMapper,
     private val propertyClient: PropertyClient,
+    private val bankCardClient: BankCardClient,
 ) {
 
     suspend fun findAllByTenantId(tenantId: String): List<PaymentDto> {
@@ -51,6 +54,10 @@ class PaymentService(
             }
             propertyDto.free = false
             propertyClient.run { update(propertyDto) }
+            //todo реализация списания средств со счета
+            val bankCards = withContext(Dispatchers.IO) {
+                bankCardClient.findAll(paymentDto.tenantId)
+            }
         } else {
             paymentDto.status = Payment.PaymentStatus.FAILED
             booking.status = Booking.BookingStatus.CANCELLED

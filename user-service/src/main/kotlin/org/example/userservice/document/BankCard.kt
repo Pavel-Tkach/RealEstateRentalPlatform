@@ -19,6 +19,8 @@ class BankCard(
     val cardType: CardType,
     val cvc: String,
     val balance: BigDecimal,
+    @Field(name = "is_default")
+    val priority: Boolean,
 ) {
 
     enum class CardType {

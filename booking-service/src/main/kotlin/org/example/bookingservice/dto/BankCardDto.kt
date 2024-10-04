@@ -1,6 +1,5 @@
-package org.example.userservice.dto
+package org.example.bookingservice.dto
 
-import org.example.userservice.document.BankCard.CardType
 import java.math.BigDecimal
 import java.util.Date
 
@@ -13,4 +12,10 @@ class BankCardDto(
     val cvc: String,
     val balance: BigDecimal,
     val priority: Boolean,
-)
+) {
+
+    enum class CardType {
+        VISA,
+        MASTERCARD,
+    }
+}

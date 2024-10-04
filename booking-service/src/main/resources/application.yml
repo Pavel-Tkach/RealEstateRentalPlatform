@@ -12,6 +12,8 @@ spring:
         config:
           property:
             url: ${PROPERTY_FEIGN_CLIENT_URL:http://localhost:8080/properties}
+          bank-card:
+            url: ${BANK_CARD_FEIGN_CLIENT_URL:http://localhost:8082/bankCards}
 
 eureka:
   client:
