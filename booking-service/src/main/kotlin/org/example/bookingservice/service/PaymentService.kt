@@ -27,10 +27,8 @@ class PaymentService(
     private val bankCardClient: BankCardClient,
 ) {
 
-    suspend fun findAllByUserId(userId: String): List<PaymentDto> {
-        return paymentRepository.findAllByUserId(userId)
+    suspend fun findAllByUserId(userId: String): List<PaymentDto> = paymentRepository.findAllByUserId(userId)
             .map { paymentMapper.toDto(it) }
-    }
 
     suspend fun findById(userId: String): PaymentDto {
         val payment = paymentRepository.findByUserId(userId)
@@ -48,7 +46,6 @@ class PaymentService(
         }
         val priorityBankCard = bankCards.first { card -> card.priority }
         val balance = priorityBankCard.balance
-        //todo списание со счета сердств за бронирование, установка в поле amount суммы бронирования, которая была уже списана
         if (booking.totalPrice <= balance) {
             priorityBankCard.balance -= booking.totalPrice
             bankCardClient.run { update(priorityBankCard) }

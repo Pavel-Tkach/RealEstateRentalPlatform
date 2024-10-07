@@ -1,10 +1,9 @@
 package org.example.bookingservice.dto
 
-import org.bson.types.ObjectId
 import java.math.BigDecimal
 
 data class PropertyDto(
-    val id: String? = ObjectId.get().toString(),
+    val id: String?,
     val title: String,
     val description: String,
     val type: PropertyType,

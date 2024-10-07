@@ -1,11 +1,10 @@
 package org.example.propertyservice.dto
 
-import org.bson.types.ObjectId
 import org.example.propertyservice.document.Property
 import java.math.BigDecimal
 
 data class PropertyDto(
-    val id: String? = ObjectId.get().toString(),
+    val id: String?,
     val title: String,
     val description: String,
     val type: Property.PropertyType,

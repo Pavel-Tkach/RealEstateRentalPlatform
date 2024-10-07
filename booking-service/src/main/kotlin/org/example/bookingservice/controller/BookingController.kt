@@ -19,28 +19,19 @@ class BookingController(
 ) {
 
     @GetMapping("/bookings")
-    suspend fun findAllBookings(@RequestParam userId: String): List<BookingDto> {
-        return bookingService.findAllByUserId(userId)
-    }
+    suspend fun findAllBookings(@RequestParam userId: String): List<BookingDto> = bookingService.findAllByUserId(userId)
 
     @GetMapping("/bookings/{bookingId}")
-    suspend fun findBookingById(@PathVariable bookingId: String): BookingDto {
-        return bookingService.findById(bookingId)
-    }
+    suspend fun findBookingById(@PathVariable bookingId: String): BookingDto = bookingService.findById(bookingId)
 
     @PostMapping("/bookings")
-    suspend fun createBooking(@RequestBody bookingDto: BookingDto): BookingDto {
-        return bookingService.create(bookingDto)
-    }
+    suspend fun createBooking(@RequestBody bookingDto: BookingDto): BookingDto = bookingService.create(bookingDto)
 
     @PostMapping("/bookings/{bookingId}/payments")
     suspend fun makePayment(@PathVariable bookingId: String,
-                            @RequestBody paymentDto: PaymentDto,): PaymentDto {
-        return paymentService.create(bookingId, paymentDto)
-    }
+                            @RequestBody paymentDto: PaymentDto,
+                            ): PaymentDto = paymentService.create(bookingId, paymentDto)
 
     @DeleteMapping("/bookings/{bookingId}")
-    suspend fun deleteBookingById(@PathVariable bookingId: String) {
-        bookingService.deleteById(bookingId)
-    }
+    suspend fun deleteBookingById(@PathVariable bookingId: String) = bookingService.deleteById(bookingId)
 }

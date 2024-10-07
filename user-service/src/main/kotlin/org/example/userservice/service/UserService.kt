@@ -9,6 +9,7 @@ import org.example.userservice.mapper.UserMapper
 import org.example.userservice.mapper.UserUpdateMapper
 import org.example.userservice.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
@@ -28,19 +29,22 @@ class UserService(
         return userMapper.toDto(user)
     }
 
+    @Transactional
     suspend fun create(userUpdateDto: UserUpdateDto,): UserUpdateDto {
-        val user = userUpdateMapper.toEntity(userUpdateDto)
+        val user = userUpdateMapper.toDocument(userUpdateDto)
         val savedUser = userRepository.save(user)
 
         return userUpdateMapper.toDto(savedUser)
     }
 
+    @Transactional
     suspend fun update(userUpdateDto: UserUpdateDto,): UserUpdateDto {
-        val user = userUpdateMapper.toEntity(userUpdateDto)
+        val user = userUpdateMapper.toDocument(userUpdateDto)
         val savedUser = userRepository.save(user)
 
         return userUpdateMapper.toDto(savedUser)
     }
 
+    @Transactional
     suspend fun deleteById(id: String,) = userRepository.deleteById(id)
 }

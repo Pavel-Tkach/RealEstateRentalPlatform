@@ -26,5 +26,7 @@ class BankCardController(
     suspend fun update(@RequestBody bankCardDto: BankCardDto,) = bankCardService.update(bankCardDto)
 
     @DeleteMapping("/bankCards/{bankCardId}")
-    suspend fun deleteById(@PathVariable bankCardId: String,) = bankCardService.deleteById(bankCardId)
+    suspend fun deleteById(@PathVariable bankCardId: String,
+                           @RequestParam userId: String,
+                           ) = bankCardService.deleteById(bankCardId, userId)
 }

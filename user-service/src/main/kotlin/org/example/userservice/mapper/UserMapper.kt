@@ -9,5 +9,5 @@ interface UserMapper {
 
     fun toDto(user: User): UserDto
 
-    fun toEntity(userDto: UserDto): User
+    fun toDocument(userDto: UserDto): User
 }

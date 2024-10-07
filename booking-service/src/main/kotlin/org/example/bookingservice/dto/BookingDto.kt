@@ -1,12 +1,11 @@
 package org.example.bookingservice.dto
 
-import org.bson.types.ObjectId
 import org.example.bookingservice.document.Booking
 import java.math.BigDecimal
 import java.util.*
 
 data class BookingDto(
-    val id: String? = ObjectId.get().toString(),
+    val id: String?,
     val propertyId: String,
     val userId: String,
     val startDate: Date,

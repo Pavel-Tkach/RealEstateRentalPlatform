@@ -13,13 +13,10 @@ class PaymentController(
 ) {
 
     @GetMapping("/payments")
-    suspend fun findAllPayments(@RequestParam userId: String): List<PaymentDto> {
-        return paymentService.findAllByUserId(userId)
-    }
+    suspend fun findAllPayments(@RequestParam userId: String): List<PaymentDto> = paymentService.findAllByUserId(userId)
 
     @GetMapping("/payments/{paymentId}")
     suspend fun findPaymentById(@PathVariable paymentId: String,
-                                @RequestParam userId: String,): PaymentDto {
-        return paymentService.findById(userId)
-    }
+                                @RequestParam userId: String,
+                                ): PaymentDto  = paymentService.findById(userId)
 }

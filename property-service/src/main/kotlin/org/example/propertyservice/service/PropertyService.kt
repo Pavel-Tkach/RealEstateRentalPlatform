@@ -42,7 +42,7 @@ class PropertyService(
     }
 
     @Transactional
-    suspend fun deleteById(id: String, userId: String) {
+    suspend fun deleteById(id: String, userId: String,) {
         val property = propertyRepository.findById(id)
             ?: throw PropertyNotFoundException("Property not found")
         if (property.ownerId != userId) {

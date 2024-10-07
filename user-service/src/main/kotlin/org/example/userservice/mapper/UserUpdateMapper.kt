@@ -9,5 +9,5 @@ interface UserUpdateMapper {
 
     fun toDto(user: User): UserUpdateDto
 
-    fun toEntity(userUpdateDto: UserUpdateDto): User
+    fun toDocument(userUpdateDto: UserUpdateDto): User
 }

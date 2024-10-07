@@ -9,5 +9,5 @@ interface BankCardMapper {
 
     fun toDto(bankCard: BankCard): BankCardDto
 
-    fun toEntity(bankCardDto: BankCardDto): BankCard
+    fun toDocument(bankCardDto: BankCardDto): BankCard
 }

@@ -27,7 +27,6 @@ class BookingService(
 
         return bookingsByTenantId
             .map { booking -> bookingMapper.toDto(booking) }
-            .toList()
     }
 
     suspend fun findById(bookingId: String,): BookingDto {
