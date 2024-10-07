@@ -10,8 +10,8 @@ import java.util.*
 data class Payment(
     @Id
     val id: String? = ObjectId.get().toString(),
-    val tenantId: String,
-    val amount: BigDecimal,
+    val userId: String,
+    val amount: BigDecimal?,
     var status: PaymentStatus,
     val paymentDate: Date,
 ) {

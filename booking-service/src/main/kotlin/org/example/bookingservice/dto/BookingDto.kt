@@ -8,7 +8,7 @@ import java.util.*
 data class BookingDto(
     val id: String? = ObjectId.get().toString(),
     val propertyId: String,
-    val tenantId: String,
+    val userId: String,
     val startDate: Date,
     val endDate: Date,
     val totalPrice: BigDecimal? = BigDecimal.ZERO,

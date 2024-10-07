@@ -19,7 +19,6 @@ data class Property(
 ) {
 
     enum class PropertyType {
-
         APARTMENT,
         HOUSE,
         OFFICE,

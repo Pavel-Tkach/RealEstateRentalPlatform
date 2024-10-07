@@ -10,7 +10,7 @@ class BankCardDto(
     val expiryDate: Date,
     val cardType: CardType,
     val cvc: String,
-    val balance: BigDecimal,
+    var balance: BigDecimal,
     val priority: Boolean,
 ) {
 

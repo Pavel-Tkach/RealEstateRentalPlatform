@@ -19,8 +19,8 @@ class BookingController(
 ) {
 
     @GetMapping("/bookings")
-    suspend fun findAllBookings(@RequestParam tenantId: String): List<BookingDto> {
-        return bookingService.findAllByTenantId(tenantId)
+    suspend fun findAllBookings(@RequestParam userId: String): List<BookingDto> {
+        return bookingService.findAllByUserId(userId)
     }
 
     @GetMapping("/bookings/{bookingId}")

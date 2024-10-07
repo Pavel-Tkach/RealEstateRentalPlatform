@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -21,6 +22,9 @@ class BankCardController(
     @PostMapping("/bankCards")
     suspend fun create(@RequestBody bankCardDto: BankCardDto,): BankCardDto = bankCardService.create(bankCardDto)
 
+    @PutMapping("/bankCards")
+    suspend fun update(@RequestBody bankCardDto: BankCardDto,) = bankCardService.update(bankCardDto)
+
     @DeleteMapping("/bankCards/{bankCardId}")
-    suspend fun deleteById(@PathVariable bankCardId: String) = bankCardService.deleteById(bankCardId)
+    suspend fun deleteById(@PathVariable bankCardId: String,) = bankCardService.deleteById(bankCardId)
 }

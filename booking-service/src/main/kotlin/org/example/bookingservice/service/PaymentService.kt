@@ -9,6 +9,7 @@ import org.example.bookingservice.document.Booking
 import org.example.bookingservice.document.Payment
 import org.example.bookingservice.dto.PaymentDto
 import org.example.bookingservice.exception.BookingNotFoundException
+import org.example.bookingservice.exception.NotEnoughMoneyOnCardException
 import org.example.bookingservice.exception.PaymentNotFoundException
 import org.example.bookingservice.mapper.PaymentMapper
 import org.example.bookingservice.repository.BookingRepository
@@ -26,15 +27,14 @@ class PaymentService(
     private val bankCardClient: BankCardClient,
 ) {
 
-    suspend fun findAllByTenantId(tenantId: String): List<PaymentDto> {
-        return paymentRepository.findAllByTenantId(tenantId)
+    suspend fun findAllByUserId(userId: String): List<PaymentDto> {
+        return paymentRepository.findAllByUserId(userId)
             .map { paymentMapper.toDto(it) }
-            .toList()
     }
 
-    suspend fun findById(tenantId: String): PaymentDto {
-        val payment = paymentRepository.findByTenantId(tenantId)
-            ?: throw PaymentNotFoundException("Payment for user with id $tenantId not found")
+    suspend fun findById(userId: String): PaymentDto {
+        val payment = paymentRepository.findByUserId(userId)
+            ?: throw PaymentNotFoundException("Payment for user with id $userId not found")
 
         return paymentMapper.toDto(payment)
     }
@@ -43,9 +43,15 @@ class PaymentService(
     suspend fun create(bookingId: String, paymentDto: PaymentDto): PaymentDto {
         val booking = (bookingRepository.findById(bookingId)
             ?: throw BookingNotFoundException("Booking with id $bookingId not found"))
-        val change = paymentDto.amount - booking.totalPrice
-        //todo сделать возврат сдачи пользователю
-        if (change >= BigDecimal.ZERO) {
+        val bankCards = withContext(Dispatchers.IO) {
+            bankCardClient.findAll(paymentDto.userId)
+        }
+        val priorityBankCard = bankCards.first { card -> card.priority }
+        val balance = priorityBankCard.balance
+        //todo списание со счета сердств за бронирование, установка в поле amount суммы бронирования, которая была уже списана
+        if (booking.totalPrice <= balance) {
+            priorityBankCard.balance -= booking.totalPrice
+            bankCardClient.run { update(priorityBankCard) }
             paymentDto.status = Payment.PaymentStatus.PAID
             booking.status = Booking.BookingStatus.CONFIRMED
             bookingRepository.save(booking)
@@ -54,15 +60,14 @@ class PaymentService(
             }
             propertyDto.free = false
             propertyClient.run { update(propertyDto) }
-            //todo реализация списания средств со счета
-            val bankCards = withContext(Dispatchers.IO) {
-                bankCardClient.findAll(paymentDto.tenantId)
-            }
-        } else {
+        }
+        else {
             paymentDto.status = Payment.PaymentStatus.FAILED
             booking.status = Booking.BookingStatus.CANCELLED
             bookingRepository.save(booking)
+            throw NotEnoughMoneyOnCardException("Not enough money on your priority card")
         }
+        paymentDto.amount = booking.totalPrice
         val payment = paymentMapper.toDocument(paymentDto)
         val savedPayment = paymentRepository.save(payment)
 

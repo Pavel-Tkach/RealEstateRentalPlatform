@@ -11,7 +11,7 @@ services:
 
 #  property-service:
 #    container_name: property-service-application
-#    build: ./PropertyService
+#    build: ./property-service
 #    depends_on:
 #      - mongo-property-service
 #      - eureka-server
@@ -30,7 +30,7 @@ services:
 
 #  booking-service:
 #    container_name: booking-service-application
-#    build: ./BookingService
+#    build: ./booking-service
 #    depends_on:
 #      - mongo-booking-service
 #      - eureka-server
@@ -60,6 +60,16 @@ services:
 
   eureka-server:
     container_name: eureka-server
-    build: ./EurekaServer
+    build: ./eureka-server
     ports:
       - "8083:8080"
+
+#  gateway-service:
+#    container_name: gateway-service
+#    build: ./gateway-service
+#    ports:
+#      - "8084:8080"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - eureka-server

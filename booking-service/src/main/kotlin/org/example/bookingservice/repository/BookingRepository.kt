@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface BookingRepository: CoroutineCrudRepository<Booking, String> {
 
-    fun findAllByTenantId(tenantId: String) : List<Booking>
+    fun findAllByUserId(userId: String) : List<Booking>
 }

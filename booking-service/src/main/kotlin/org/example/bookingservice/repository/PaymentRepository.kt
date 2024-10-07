@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PaymentRepository: CoroutineCrudRepository<Payment, String> {
 
-    suspend fun findAllByTenantId(tenantId: String): List<Payment>
+    suspend fun findAllByUserId(userId: String): List<Payment>
 
-    suspend fun findByTenantId(tenantId: String): Payment?
+    suspend fun findByUserId(userId: String): Payment?
 }

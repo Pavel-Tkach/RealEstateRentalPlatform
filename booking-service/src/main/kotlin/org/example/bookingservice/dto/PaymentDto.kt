@@ -8,8 +8,8 @@ import java.util.*
 
 data class PaymentDto(
     val id: String? = ObjectId.get().toString(),
-    val tenantId: String,
-    val amount: BigDecimal,
+    val userId: String,
+    var amount: BigDecimal?,
     var status: Payment.PaymentStatus? = Payment.PaymentStatus.PENDING,
     val paymentDate: Date? = Date.from(Instant.now()),
 )

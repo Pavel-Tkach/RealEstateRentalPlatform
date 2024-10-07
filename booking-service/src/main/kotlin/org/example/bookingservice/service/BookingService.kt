@@ -6,6 +6,7 @@ import org.example.bookingservice.client.PropertyClient
 import org.example.bookingservice.document.Booking
 import org.example.bookingservice.dto.BookingDto
 import org.example.bookingservice.exception.BookingNotFoundException
+import org.example.bookingservice.exception.PropertyAlreadyBookedException
 import org.example.bookingservice.mapper.BookingMapper
 import org.example.bookingservice.repository.BookingRepository
 import org.springframework.stereotype.Service
@@ -21,8 +22,8 @@ class BookingService(
     private val propertyClient: PropertyClient,
     ) {
 
-    suspend fun findAllByTenantId(tenantId: String,): List<BookingDto> {
-        val bookingsByTenantId = bookingRepository.findAllByTenantId(tenantId)
+    suspend fun findAllByUserId(userId: String,): List<BookingDto> {
+        val bookingsByTenantId = bookingRepository.findAllByUserId(userId)
 
         return bookingsByTenantId
             .map { booking -> bookingMapper.toDto(booking) }
@@ -40,6 +41,9 @@ class BookingService(
     suspend fun create(bookingDto: BookingDto,): BookingDto {
         val propertyDto = withContext(Dispatchers.IO) {
             propertyClient.findById(bookingDto.propertyId)
+        }
+        if (!propertyDto.free) {
+            throw PropertyAlreadyBookedException("Property ${bookingDto.propertyId} has already been booked")
         }
         val pricePerNight = propertyDto.pricePerNight
         val totalPrice = calculateTotalPriceForBooking(bookingDto, pricePerNight)
