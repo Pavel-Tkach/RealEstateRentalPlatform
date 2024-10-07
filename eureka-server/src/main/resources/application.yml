@@ -6,6 +6,8 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE}
 
 logging:
   level:

@@ -26,5 +26,3 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8083/eureka/}
 
-server:
-  port: ${API_GATEWAY_PORT:8084}
