@@ -67,9 +67,9 @@ services:
 #  gateway-service:
 #    container_name: gateway-service
 #    build: ./gateway-service
+#    depends_on:
+#      - eureka-server
 #    ports:
 #      - "8084:8080"
 #    env_file:
 #      - .env
-#    depends_on:
-#      - eureka-server
