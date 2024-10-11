@@ -19,8 +19,7 @@ class SecurityConfig {
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable)
             .authorizeExchange { exchange ->
-                exchange.pathMatchers("/eureka/").permitAll()
-                    .pathMatchers("/secured/").hasRole("ADMIN")
+                exchange.pathMatchers("/eureka/**").permitAll()
                     .anyExchange().authenticated()
             }
             .oauth2ResourceServer { resource ->

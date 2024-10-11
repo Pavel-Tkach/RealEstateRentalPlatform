@@ -25,18 +25,35 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: property-service-route
+        - id: property-get-route
           uri: lb://property-service
           predicates:
             - Path=/properties
-        - id: user-service-route
-          uri: lb://user-service
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER  # Доступ для USER только для GET
+
+        - id: property-post-route
+          uri: lb://property-service
           predicates:
-            - Path=/users
-        - id: booking-service-route
-          uri: lb://booking-service
+            - Path=/properties
+            - Method=POST
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER  # Доступ для USER только для POST
+
+        - id: property-delete-route
+          uri: lb://property-service
           predicates:
-            - Path=/bookings,/payments
+            - Path=/properties/{id}
+            - Method=DELETE
+          filters:
+            - name: AuthFilter
+              args:
+                role: ADMIN  # Доступ для ADMIN только для DELETE
 
 eureka:
   client:
@@ -48,3 +65,7 @@ server:
 logging:
   level:
     org.springframework.security: TRACE
+
+jwt:
+  secret-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp7zvQSzEGpGcaMmkIzicZpy7FUtakiETV2Pg9ZsosJX9GBH140Pbj+TB+K/mAjWRRf6Wz24iC5Yh2wrchLqYzn5ooajn5moyLdJh+MKNghkbZkIcPEDwGJfkIAhmI76UrrMOvQj9KJ30OE1Xcj0c+PjLJG9EMifJzVuYoM8cpWJirtg136hR3kyiw8S7KqJlWCNHPoDJj7dk8lNabgokjdIfEbhxVQVOGFOD2XmZEYmfvGzJVdVYnzpmNVAbh7plXOtuo4vvq5YOfjDBlQhGww2uHWboZ9d+guSiVORw0Q6NnvfxUqOykRSfLvahiInvp2nJZJx78M0VTYZbMkwv8QIDAQAB
+
