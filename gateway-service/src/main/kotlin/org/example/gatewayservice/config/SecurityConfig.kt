@@ -3,6 +3,7 @@ package org.example.gatewayservice.config
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AbstractAuthenticationToken
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.oauth2.jwt.Jwt
@@ -25,6 +26,7 @@ class SecurityConfig {
             .oauth2ResourceServer { resource ->
                 resource.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) }
             }
+            .oauth2Login(Customizer.withDefaults())
 
         return http.build()
     }

@@ -33,7 +33,17 @@ spring:
           filters:
             - name: AuthFilter
               args:
-                role: USER  # Доступ для USER только для GET
+                role: USER
+
+        - id: property-get-by-id-route
+          uri: lb://property-service
+          predicates:
+            - Path=/properties/{propertyId}
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
 
         - id: property-post-route
           uri: lb://property-service
@@ -43,17 +53,77 @@ spring:
           filters:
             - name: AuthFilter
               args:
-                role: USER  # Доступ для USER только для POST
+                role: USER
+
+        - id: property-put-route
+          uri: lb://property-service
+          predicates:
+            - Path=/properties
+            - Method=PUT
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
 
         - id: property-delete-route
           uri: lb://property-service
           predicates:
-            - Path=/properties/{id}
+            - Path=/properties/{propertyId}
             - Method=DELETE
           filters:
             - name: AuthFilter
               args:
-                role: ADMIN  # Доступ для ADMIN только для DELETE
+                role: USER
+
+        - id: booking-get-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
+        - id: booking-get-by-id-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings/{bookingId}
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
+        - id: booking-post-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings
+            - Method=POST
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
+        - id: booking-payment-post-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings/{bookingId}/payments
+            - Method=POST
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
+        - id: booking-delete-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings/{bookingId}
+            - Method=DELETE
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
 
 eureka:
   client:

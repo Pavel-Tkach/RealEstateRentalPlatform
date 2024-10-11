@@ -1,8 +1,7 @@
 package org.example.gatewayservice.config
 
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.io.Decoders
-import io.jsonwebtoken.security.Keys
+import org.example.gatewayservice.exception.AuthorizationException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory
@@ -12,13 +11,13 @@ import org.springframework.stereotype.Component
 import java.security.Key
 import java.security.KeyFactory
 import java.security.spec.X509EncodedKeySpec
-import java.util.Base64
+import java.util.*
 
 @Component
 class AuthFilter
 (
     @Value("\${jwt.secret-key}")
-    var jwtSecret: String
+    val jwtSecret: String
 ): AbstractGatewayFilterFactory<AuthFilter.Config>(Config::class.java) {
 
     data class Config(val role: String)
@@ -26,14 +25,12 @@ class AuthFilter
     override fun apply(config: Config): GatewayFilter {
         return GatewayFilter { exchange, chain ->
             val authHeader = exchange.request.headers[HttpHeaders.AUTHORIZATION]?.firstOrNull()
-                ?: throw RuntimeException("Missing authorization information")
-            val headers = exchange.request.headers
+                ?: throw AuthorizationException("Missing authorization information")
             val parts = authHeader.split(" ")
             if (parts.size != 2 || parts[0] != "Bearer") {
-                throw RuntimeException("Incorrect authorization structure")
+                throw AuthorizationException("Incorrect authorization structure")
             }
             val token = parts[1].trim()
-            //error
             val jwtRoles = getRoles(token)
             checkNeededRoles(jwtRoles, config.role)
             val userId = getUserId(token)
@@ -43,13 +40,12 @@ class AuthFilter
         }
     }
 
-    fun getRoles(token: String): List<String> {
+    private fun getRoles(token: String): List<String> {
         val body = Jwts.parserBuilder()
             .setSigningKey(getSignInKey())
             .build()
             .parseClaimsJws(token)
             .body
-        body["spring_sec_roles"]
         val claimRoles: List<String> = body["spring_sec_roles"] as List<String>
 
         return claimRoles.filter { it.startsWith("ROLE_") }
