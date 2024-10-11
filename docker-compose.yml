@@ -64,12 +64,44 @@ services:
     ports:
       - "8083:8080"
 
-  gateway-service:
-    container_name: gateway-service
-    build: ./gateway-service
+#  gateway-service:
+#    container_name: gateway-service
+#    build: ./gateway-service
+#    depends_on:
+#      - eureka-server
+#    ports:
+#      - "8888:8080"
+#    env_file:
+#      - .env
+
+  keycloak_web:
+    image: quay.io/keycloak/keycloak:23.0.7
+    container_name: keycloak_web
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: 1234
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 10000
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
     depends_on:
-      - eureka-server
+      - keycloak-db
     ports:
-      - "8888:8080"
-    env_file:
-      - .env
+      - "10000:8080"
+
+  keycloak-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234

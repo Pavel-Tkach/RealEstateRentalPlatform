@@ -31,7 +31,7 @@ class PropertyController(
         return propertyService.create(propertyDto)
     }
 
-    @PutMapping("properties")
+    @PutMapping("/properties")
     suspend fun update(@RequestBody propertyDto: PropertyDto,) {
         propertyService.update(propertyDto)
     }

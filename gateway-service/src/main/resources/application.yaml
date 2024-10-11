@@ -1,6 +1,23 @@
 spring:
   application:
     name: gateway-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:10000/realms/RealEstateRentalPlatform/protocol/openid-connect/certs
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:10000/realms/RealEstateRentalPlatform
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: gateway-security
+            client-secret: jxQswsT4s4b2AAESaJ0KEHnKPAofTWLw
+            authorization-grant-type: authorization_code
+            scope: openid
+
   cloud:
     gateway:
       discovery:
@@ -24,4 +41,10 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_DEFAULT_ZONE}
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8083/eureka/}
+
+server:
+  port: 8084
+logging:
+  level:
+    org.springframework.security: TRACE
