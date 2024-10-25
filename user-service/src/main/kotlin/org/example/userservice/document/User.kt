@@ -16,11 +16,4 @@ class User(
     val phone: String,
     @Field(value = "birth_date")
     val birthDate: Date,
-    var roles: List<RoleType> = emptyList(),
-) {
-
-    enum class RoleType {
-        ROLE_USER,
-        ROLE_ADMIN,
-    }
-}
+)

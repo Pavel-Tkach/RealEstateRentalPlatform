@@ -1,6 +1,5 @@
 package org.example.userservice.dto
 
-import org.example.userservice.document.User
 import java.util.*
 
 class UserUpdateDto(
@@ -11,5 +10,4 @@ class UserUpdateDto(
     val password: String,
     val phone: String,
     val birthDate: Date,
-    val roles: List<User.RoleType> = listOf(),
 )

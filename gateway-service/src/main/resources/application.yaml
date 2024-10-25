@@ -30,20 +30,12 @@ spring:
           predicates:
             - Path=/properties
             - Method=GET
-          filters:
-            - name: AuthFilter
-              args:
-                role: USER
 
         - id: property-get-by-id-route
           uri: lb://property-service
           predicates:
             - Path=/properties/{propertyId}
             - Method=GET
-          filters:
-            - name: AuthFilter
-              args:
-                role: USER
 
         - id: property-post-route
           uri: lb://property-service
@@ -125,6 +117,46 @@ spring:
               args:
                 role: USER
 
+        - id: user-get-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: ADMIN
+
+        - id: user-get-by-email-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users/search
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: ADMIN
+
+        - id: user-put-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users
+            - Method=PUT
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
+        - id: user-delete-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users/{userId}
+            - Method=DELETE
+          filters:
+            - name: AuthFilter
+              args:
+                role: ADMIN
+
 eureka:
   client:
     service-url:
@@ -137,5 +169,4 @@ logging:
     org.springframework.security: TRACE
 
 jwt:
-  secret-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp7zvQSzEGpGcaMmkIzicZpy7FUtakiETV2Pg9ZsosJX9GBH140Pbj+TB+K/mAjWRRf6Wz24iC5Yh2wrchLqYzn5ooajn5moyLdJh+MKNghkbZkIcPEDwGJfkIAhmI76UrrMOvQj9KJ30OE1Xcj0c+PjLJG9EMifJzVuYoM8cpWJirtg136hR3kyiw8S7KqJlWCNHPoDJj7dk8lNabgokjdIfEbhxVQVOGFOD2XmZEYmfvGzJVdVYnzpmNVAbh7plXOtuo4vvq5YOfjDBlQhGww2uHWboZ9d+guSiVORw0Q6NnvfxUqOykRSfLvahiInvp2nJZJx78M0VTYZbMkwv8QIDAQAB
-
+  secret-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2ToMPKAchyEjqTyoVRDsjtmyzn9L5jZ4AWfbzXcn2FmdGs/I0p/QdL59M1u6gEoXA0hVPlryqG1IuLNjK8iimN1PCbwGb3klRm+ovLODP+9rn2oj3uaGHNzabKQIAdomr4ATb7Y50HuC6U1h8MyQJZmeEsn3DvG3spM9ECkxQ2nfx+CFXejyKFjMsbW7qKePVPxJsDtRWipn1grZBIk+gaPQdHkKbphceLNnXta0PJCAaq6jqkrxX8YGf+joO8beEP9LV7LMLwJQ84GmKUMEvJI+kBAypWz/s8R+CIgykRFiZ8m9QdzZWehfWK3pXCu6IYxy5MeuwRTwnH4YmfXQ1wIDAQAB
