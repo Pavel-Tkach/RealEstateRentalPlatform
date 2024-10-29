@@ -7,6 +7,8 @@ import org.example.userservice.mapper.BankCardMapper
 import org.example.userservice.repository.BankCardRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Service
 class BankCardService(
@@ -14,30 +16,49 @@ class BankCardService(
     private val bankCardMapper: BankCardMapper,
 ) {
 
-    suspend fun findAll(userId: String): List<BankCardDto> = bankCardRepository.findAllByUserId(userId)
+    fun findAll(userId: String): Flux<BankCardDto> = bankCardRepository.findAllByUserId(userId)
         .map { bankCardMapper.toDto(it) }
 
     @Transactional
-    suspend fun create(bankCardDto: BankCardDto): BankCardDto {
+    fun create(bankCardDto: BankCardDto): Mono<BankCardDto> {
         val bankCard = bankCardMapper.toDocument(bankCardDto)
-        val savedBankCard = bankCardRepository.save(bankCard)
 
-        return bankCardMapper.toDto(savedBankCard)
+        return bankCardRepository.save(bankCard)
+            .map { bankCardMapper.toDto(it) }
     }
 
     @Transactional
-    suspend fun update(bankCardDto: BankCardDto) {
+    fun update(bankCardDto: BankCardDto): Mono<BankCardDto> {
         val bankCard = bankCardMapper.toDocument(bankCardDto)
-        bankCardRepository.save(bankCard)
+
+        return bankCardRepository.save(bankCard)
+            .map { bankCardMapper.toDto(it) }
     }
 
     @Transactional
-    suspend fun deleteById(bankCardId: String, userId: String,) {
-        val bankCard = bankCardRepository.findById(bankCardId)
-            ?: throw BankCardNotFoundException("Bank card with id $bankCardId not found")
-        if (bankCard.userId != userId) {
-            throw IllegalRightsException("You can't remove this card, because you aren't its owner")
+    fun deleteById(bankCardId: Long, userId: String): Mono<Void> {
+        return bankCardRepository.findById(bankCardId)
+            .flatMap { bankCard ->
+                validateOwnership(bankCard.userId, userId)
+                    .then(bankCardRepository.delete(bankCard))
+            }
+            .onErrorResume { handleDeleteError(it, bankCardId) }
+    }
+
+    private fun validateOwnership(cardUserId: String, userId: String): Mono<Void> {
+        return Mono.defer {
+            if (cardUserId != userId) {
+                Mono.error(IllegalRightsException("You can't remove this card, because you aren't its owner"))
+            } else {
+                Mono.empty()
+            }
         }
-        bankCardRepository.delete(bankCard)
+    }
+
+    private fun handleDeleteError(throwable: Throwable, bankCardId: Long): Mono<Void> {
+        return when (throwable) {
+            is BankCardNotFoundException -> Mono.error(BankCardNotFoundException("Bank card with id = $bankCardId not found"))
+            else -> Mono.error(throwable)
+        }
     }
 }

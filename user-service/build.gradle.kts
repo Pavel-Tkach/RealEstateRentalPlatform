@@ -22,14 +22,18 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
+    implementation("org.springframework.data:spring-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:3.3.4")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+    implementation("org.liquibase:liquibase-core:4.29.2")
+    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.postgresql:r2dbc-postgresql:1.0.7.RELEASE")
 
     compileOnly("org.mapstruct:mapstruct:1.6.0")
     kapt("org.mapstruct:mapstruct-processor:1.6.0")

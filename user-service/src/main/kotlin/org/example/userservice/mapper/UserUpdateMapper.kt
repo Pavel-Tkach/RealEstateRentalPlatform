@@ -1,6 +1,6 @@
 package org.example.userservice.mapper
 
-import org.example.userservice.document.User
+import org.example.userservice.entity.User
 import org.example.userservice.dto.UserUpdateDto
 import org.mapstruct.Mapper
 

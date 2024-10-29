@@ -39,14 +39,6 @@ services:
 #    env_file:
 #      - .env
   
-  mongo-user-service:
-    container_name: user-service-database
-    image: mongo
-    environment:
-      MONGO_INITDB_DATABASE: user-db
-    ports:
-      - "2703:27017"
-  
 #  user-service:
 #    container_name: user-service-application
 #    build: ./user-service
@@ -105,6 +97,8 @@ services:
 
   keycloak-db:
     image: postgres
+    ports:
+      - "5555:5432"
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: postgres

@@ -1,0 +1,2 @@
+INSERT INTO bank_card(user_id, number, expiry_date, card_type, cvc, balance, priority)
+VALUES ('ad42555a-69fc-4aff-b218-64fc3bb567f7', '281742178947129', '2026-07-18T13:30:00+03:00', 'VISA', '812', 1000, TRUE)

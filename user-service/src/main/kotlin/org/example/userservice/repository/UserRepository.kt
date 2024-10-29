@@ -1,11 +1,12 @@
 package org.example.userservice.repository
 
-import org.example.userservice.document.User
-import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import org.example.userservice.entity.User
+import org.springframework.data.r2dbc.repository.R2dbcRepository
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 
 @Repository
-interface UserRepository: CoroutineCrudRepository<User, String> {
+interface UserRepository: R2dbcRepository<User, String> {
 
-    suspend fun findByEmail(email: String): User?
+    fun findByEmail(email: String): Mono<User>
 }

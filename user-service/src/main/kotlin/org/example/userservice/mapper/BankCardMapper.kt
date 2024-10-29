@@ -1,6 +1,6 @@
 package org.example.userservice.mapper
 
-import org.example.userservice.document.BankCard
+import org.example.userservice.entity.BankCard
 import org.example.userservice.dto.BankCardDto
 import org.mapstruct.Mapper
 

@@ -1,7 +1,7 @@
 package org.example.userservice.service
 
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.awaitFirstOrElse
+import kotlinx.coroutines.reactor.awaitSingle
 import org.example.userservice.dto.UserDto
 import org.example.userservice.dto.UserUpdateDto
 import org.example.userservice.exception.UserNotFoundException
@@ -10,6 +10,8 @@ import org.example.userservice.mapper.UserUpdateMapper
 import org.example.userservice.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Service
 class UserService(
@@ -18,31 +20,22 @@ class UserService(
     private val userUpdateMapper: UserUpdateMapper,
 ) {
 
-    suspend fun findAll(): List<UserDto>  = userRepository.findAll()
+    fun findAll(): Flux<UserDto>  = userRepository.findAll()
         .map { userMapper.toDto(it) }
-        .toList()
 
-    suspend fun findByEmail(email: String): UserDto {
+    suspend fun findByEmail(email: String): Mono<UserDto> {
         val user = userRepository.findByEmail(email)
-            ?: throw UserNotFoundException("User with email $email not found")
+            .awaitFirstOrElse { throw UserNotFoundException("User with email $email not found") }
 
-        return userMapper.toDto(user)
+        return Mono.just(userMapper.toDto(user))
     }
 
     @Transactional
-    suspend fun create(userUpdateDto: UserUpdateDto,): UserUpdateDto {
+    suspend fun update(userUpdateDto: UserUpdateDto,): Mono<UserUpdateDto> {
         val user = userUpdateMapper.toDocument(userUpdateDto)
-        val savedUser = userRepository.save(user)
+        val savedUser = userRepository.save(user).awaitSingle()
 
-        return userUpdateMapper.toDto(savedUser)
-    }
-
-    @Transactional
-    suspend fun update(userUpdateDto: UserUpdateDto,): UserUpdateDto {
-        val user = userUpdateMapper.toDocument(userUpdateDto)
-        val savedUser = userRepository.save(user)
-
-        return userUpdateMapper.toDto(savedUser)
+        return Mono.just(userUpdateMapper.toDto(savedUser))
     }
 
     @Transactional

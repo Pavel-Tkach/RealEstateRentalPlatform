@@ -1,11 +1,15 @@
 spring:
   application:
     name: user-service
-  data:
-    mongodb:
-      port: ${DB_PORT:2703}
-      host: ${USER_DB_HOST:localhost}
-      database: user-db
+  r2dbc:
+    url: ${KEYCLOAK_POSTGRES_URL:r2dbc:postgresql://localhost:5555/keycloak}
+    username: postgres
+    password: 1234
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.xml
+    url: jdbc:postgresql://localhost:5555/keycloak
+    user: postgres
+    password: 1234
 
 eureka:
   client:
@@ -14,3 +18,4 @@ eureka:
 
 server:
   port: ${USER_PORT:8082}
+
