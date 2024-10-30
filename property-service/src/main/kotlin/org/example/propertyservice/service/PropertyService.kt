@@ -28,7 +28,8 @@ class PropertyService(
     }
 
     @Transactional
-    suspend fun create(propertyDto: PropertyDto,): PropertyDto {
+    suspend fun create(propertyDto: PropertyDto, userId: String,): PropertyDto {
+        propertyDto.ownerId = userId
         val property = propertyMapper.toDocument(propertyDto)
         val savedProperty = propertyRepository.save(property)
 

@@ -20,7 +20,8 @@ class BankCardService(
         .map { bankCardMapper.toDto(it) }
 
     @Transactional
-    fun create(bankCardDto: BankCardDto): Mono<BankCardDto> {
+    fun create(bankCardDto: BankCardDto, userId: String,): Mono<BankCardDto> {
+        bankCardDto.userId = userId
         val bankCard = bankCardMapper.toDocument(bankCardDto)
 
         return bankCardRepository.save(bankCard)

@@ -7,7 +7,7 @@ import java.util.Date
 
 class BankCardDto(
     val id: String?,
-    val userId: String,
+    var userId: String?,
     val number: String,
     val expiryDate: OffsetDateTime,
     val cardType: CardType,

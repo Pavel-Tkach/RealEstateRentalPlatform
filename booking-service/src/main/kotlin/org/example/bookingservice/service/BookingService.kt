@@ -37,7 +37,8 @@ class BookingService(
     }
 
     @Transactional
-    suspend fun create(bookingDto: BookingDto,): BookingDto {
+    suspend fun create(bookingDto: BookingDto, userId: String,): BookingDto {
+        bookingDto.userId = userId
         val propertyDto = withContext(Dispatchers.IO) {
             propertyClient.findById(bookingDto.propertyId)
         }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
@@ -22,13 +23,15 @@ class BankCardController(
     fun findAll(@RequestParam userId: String): Flux<BankCardDto> = bankCardService.findAll(userId)
 
     @PostMapping("/bankCards")
-    fun create(@RequestBody bankCardDto: BankCardDto,): Mono<BankCardDto> = bankCardService.create(bankCardDto)
+    fun create(@RequestBody bankCardDto: BankCardDto,
+               @RequestHeader("x-auth-user-id") userId: String,
+               ): Mono<BankCardDto> = bankCardService.create(bankCardDto, userId)
 
     @PutMapping("/bankCards")
     fun update(@RequestBody bankCardDto: BankCardDto,): Mono<BankCardDto> = bankCardService.update(bankCardDto)
 
     @DeleteMapping("/bankCards/{bankCardId}")
     fun deleteById(@PathVariable bankCardId: Long,
-                           @RequestParam userId: String,
-                           ): Mono<Void> = bankCardService.deleteById(bankCardId, userId)
+                   @RequestHeader("x-auth-user-id") userId: String,
+                   ): Mono<Void> = bankCardService.deleteById(bankCardId, userId)
 }

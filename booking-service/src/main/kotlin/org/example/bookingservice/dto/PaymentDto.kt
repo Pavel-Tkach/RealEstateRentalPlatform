@@ -7,7 +7,7 @@ import java.util.*
 
 data class PaymentDto(
     val id: String?,
-    val userId: String,
+    var userId: String?,
     var amount: BigDecimal?,
     var status: Payment.PaymentStatus? = Payment.PaymentStatus.PENDING,
     val paymentDate: Date? = Date.from(Instant.now()),

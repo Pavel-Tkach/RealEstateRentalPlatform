@@ -10,6 +10,6 @@ data class PropertyDto(
     val type: Property.PropertyType,
     val locationDto: LocationDto,
     val pricePerNight: BigDecimal,
-    val ownerId: String,
+    var ownerId: String?,
     val free: Boolean,
 )
