@@ -15,8 +15,6 @@ services:
 #    depends_on:
 #      - mongo-property-service
 #      - eureka-server
-#    ports:
-#      - "8080:8080"
 #    env_file:
 #      - .env
 
@@ -43,7 +41,7 @@ services:
 #    container_name: user-service-application
 #    build: ./user-service
 #    depends_on:
-#      - mongo-user-service
+#      - keycloak-db
 #      - eureka-server
 #    ports:
 #      - "8082:8080"
