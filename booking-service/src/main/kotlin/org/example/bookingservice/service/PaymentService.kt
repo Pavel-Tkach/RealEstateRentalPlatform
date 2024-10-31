@@ -3,7 +3,7 @@ package org.example.bookingservice.service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.withContext
-import org.example.bookingservice.client.BankCardClient
+import org.example.bookingservice.client.UserClient
 import org.example.bookingservice.client.PropertyClient
 import org.example.bookingservice.document.Booking
 import org.example.bookingservice.document.Payment
@@ -24,7 +24,7 @@ class PaymentService(
     private val paymentRepository: PaymentRepository,
     private val paymentMapper: PaymentMapper,
     private val propertyClient: PropertyClient,
-    private val bankCardClient: BankCardClient,
+    private val userClient: UserClient,
 ) {
 
     suspend fun findAllByUserId(userId: String): List<PaymentDto> = paymentRepository.findAllByUserId(userId)
@@ -68,7 +68,7 @@ class PaymentService(
     suspend fun getPriorityBankCard(paymentDto: PaymentDto,): BankCardDto {
         val userId = paymentDto.userId!!
         val bankCards = withContext(Dispatchers.IO) {
-            bankCardClient.findAll(userId)
+            userClient.findAll(userId)
         }.collectList().awaitSingle()
 
         return bankCards.first { card -> card.priority }
@@ -79,7 +79,7 @@ class PaymentService(
                                                      paymentDto: PaymentDto,
                                                      ) {
         priorityBankCard.balance -= booking.totalPrice
-        bankCardClient.run { update(priorityBankCard) }
+        userClient.run { update(priorityBankCard) }
         paymentDto.status = Payment.PaymentStatus.PAID
         booking.status = Booking.BookingStatus.CONFIRMED
         bookingRepository.save(booking)

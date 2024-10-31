@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @ReactiveFeignClient(value = "user-service")
-interface BankCardClient {
+interface UserClient {
 
     @GetMapping("/bankCards")
     fun findAll(@RequestParam userId: String): Flux<BankCardDto>
