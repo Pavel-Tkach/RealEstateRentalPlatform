@@ -1,18 +1,19 @@
 package org.example.bookingservice.client
 
 import org.example.bookingservice.dto.PropertyDto
-import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import reactivefeign.spring.config.ReactiveFeignClient
+import reactor.core.publisher.Mono
 
-@FeignClient(name = "property")
+@ReactiveFeignClient(name = "property-service")
 interface PropertyClient {
 
-    @GetMapping("/{propertyId}")
-    fun findById(@PathVariable propertyId: String): PropertyDto
+    @GetMapping("/properties/{propertyId}")
+    fun findById(@PathVariable propertyId: String): Mono<PropertyDto>
 
-    @PutMapping
-    fun update(@RequestBody propertyDto: PropertyDto)
+    @PutMapping("/properties")
+    fun update(@RequestBody propertyDto: PropertyDto): Mono<Void>
 }

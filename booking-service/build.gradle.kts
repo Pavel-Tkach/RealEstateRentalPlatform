@@ -22,8 +22,10 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
+    implementation("com.playtika.reactivefeign:feign-reactor-cloud:4.2.1")
+    implementation("com.playtika.reactivefeign:feign-reactor-webclient:4.2.1")
+    implementation("com.playtika.reactivefeign:feign-reactor-spring-configuration:4.2.1")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 

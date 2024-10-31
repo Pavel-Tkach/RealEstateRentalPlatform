@@ -1,18 +1,20 @@
 package org.example.bookingservice.client
 
 import org.example.bookingservice.dto.BankCardDto
-import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
+import reactivefeign.spring.config.ReactiveFeignClient
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
-@FeignClient(value = "bank-card")
+@ReactiveFeignClient(value = "user-service")
 interface BankCardClient {
 
-    @GetMapping
-    fun findAll(@RequestParam userId: String): List<BankCardDto>
+    @GetMapping("/bankCards")
+    fun findAll(@RequestParam userId: String): Flux<BankCardDto>
 
-    @PutMapping
-    fun update(@RequestBody bankCardDto: BankCardDto)
+    @PutMapping("/bankCards")
+    fun update(@RequestBody bankCardDto: BankCardDto): Mono<Void>
 }

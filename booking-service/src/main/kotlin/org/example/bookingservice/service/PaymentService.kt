@@ -1,7 +1,7 @@
 package org.example.bookingservice.service
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.withContext
 import org.example.bookingservice.client.BankCardClient
 import org.example.bookingservice.client.PropertyClient
@@ -17,7 +17,6 @@ import org.example.bookingservice.repository.BookingRepository
 import org.example.bookingservice.repository.PaymentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 
 @Service
 class PaymentService(
@@ -49,7 +48,7 @@ class PaymentService(
             executePaymentAndUpdateBookingStatus(priorityBankCard, booking, paymentDto)
             val propertyDto = withContext(Dispatchers.IO) {
                 propertyClient.findById(booking.propertyId)
-            }
+            }.awaitSingle()
             propertyDto.free = false
             propertyClient.run { update(propertyDto) }
         }
@@ -70,7 +69,7 @@ class PaymentService(
         val userId = paymentDto.userId!!
         val bankCards = withContext(Dispatchers.IO) {
             bankCardClient.findAll(userId)
-        }
+        }.collectList().awaitSingle()
 
         return bankCards.first { card -> card.priority }
     }

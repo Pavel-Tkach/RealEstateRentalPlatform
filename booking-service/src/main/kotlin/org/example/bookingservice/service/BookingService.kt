@@ -1,6 +1,7 @@
 package org.example.bookingservice.service
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.withContext
 import org.example.bookingservice.client.PropertyClient
 import org.example.bookingservice.document.Booking
@@ -41,7 +42,7 @@ class BookingService(
         bookingDto.userId = userId
         val propertyDto = withContext(Dispatchers.IO) {
             propertyClient.findById(bookingDto.propertyId)
-        }
+        }.awaitSingle()
         if (!propertyDto.free) {
             throw PropertyAlreadyBookedException("Property ${bookingDto.propertyId} has already been booked")
         }
