@@ -7,7 +7,7 @@ spring:
     password: 1234
   liquibase:
     change-log: classpath:db.changelog/db.changelog-master.xml
-    url: jdbc:postgresql://localhost:5555/keycloak
+    url: ${KEYCLOAK_LIQUIBASE_POSTGRES_URL:jdbc:postgresql://localhost:5555/keycloak}
     user: postgres
     password: 1234
 
