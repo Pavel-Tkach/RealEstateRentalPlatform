@@ -19,3 +19,10 @@ eureka:
 server:
   port: ${USER_PORT:8082}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus

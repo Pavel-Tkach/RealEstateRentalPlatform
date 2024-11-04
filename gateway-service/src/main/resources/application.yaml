@@ -170,3 +170,11 @@ logging:
 
 jwt:
   secret-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2ToMPKAchyEjqTyoVRDsjtmyzn9L5jZ4AWfbzXcn2FmdGs/I0p/QdL59M1u6gEoXA0hVPlryqG1IuLNjK8iimN1PCbwGb3klRm+ovLODP+9rn2oj3uaGHNzabKQIAdomr4ATb7Y50HuC6U1h8MyQJZmeEsn3DvG3spM9ECkxQ2nfx+CFXejyKFjMsbW7qKePVPxJsDtRWipn1grZBIk+gaPQdHkKbphceLNnXta0PJCAaq6jqkrxX8YGf+joO8beEP9LV7LMLwJQ84GmKUMEvJI+kBAypWz/s8R+CIgykRFiZ8m9QdzZWehfWK3pXCu6IYxy5MeuwRTwnH4YmfXQ1wIDAQAB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus

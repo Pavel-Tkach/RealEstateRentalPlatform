@@ -1,0 +1,5 @@
+scrape_configs:
+  - job_name: RealEstateRentalPlatform
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["property-service:8080"] ## add other services
