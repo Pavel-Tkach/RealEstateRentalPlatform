@@ -1,5 +1,6 @@
 package org.example.userservice.controller
 
+import org.example.userservice.aspect.Loggable
 import org.example.userservice.dto.UserDto
 import org.example.userservice.dto.UserUpdateDto
 import org.example.userservice.service.UserService
@@ -18,15 +19,19 @@ class UserController(
     private val userService: UserService,
 ) {
 
+    @Loggable
     @GetMapping("/users")
     suspend fun findAll(): Flux<UserDto> = userService.findAll()
 
+    @Loggable
     @GetMapping("/users/search")
     suspend fun findByEmail(@RequestParam email: String): Mono<UserDto> = userService.findByEmail(email)
 
+    @Loggable
     @PutMapping("/users")
     suspend fun update(@RequestBody userUpdateDto: UserUpdateDto,): Mono<UserUpdateDto> = userService.update(userUpdateDto)
 
+    @Loggable
     @DeleteMapping("/users/{userId}")
     suspend fun deleteById(@PathVariable userId: String,) = userService.deleteById(userId)
 }

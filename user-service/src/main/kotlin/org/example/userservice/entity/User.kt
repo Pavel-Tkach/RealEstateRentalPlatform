@@ -9,8 +9,8 @@ class User(
     @Id
     val id: String?,
     @Column("first_name")
-    val firstname: String,
+    val firstname: String?,
     @Column("last_name")
-    val lastname: String,
-    val email: String,
+    val lastname: String?,
+    val email: String?,
 )

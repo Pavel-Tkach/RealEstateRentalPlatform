@@ -1,5 +1,6 @@
 package org.example.userservice.service
 
+import org.example.userservice.aspect.Loggable
 import org.example.userservice.dto.BankCardDto
 import org.example.userservice.exception.BankCardNotFoundException
 import org.example.userservice.exception.IllegalRightsException
@@ -16,9 +17,11 @@ class BankCardService(
     private val bankCardMapper: BankCardMapper,
 ) {
 
+    @Loggable
     fun findAll(userId: String): Flux<BankCardDto> = bankCardRepository.findAllByUserId(userId)
         .map { bankCardMapper.toDto(it) }
 
+    @Loggable
     @Transactional
     fun create(bankCardDto: BankCardDto, userId: String,): Mono<BankCardDto> {
         bankCardDto.userId = userId
@@ -28,6 +31,7 @@ class BankCardService(
             .map { bankCardMapper.toDto(it) }
     }
 
+    @Loggable
     @Transactional
     fun update(bankCardDto: BankCardDto): Mono<BankCardDto> {
         val bankCard = bankCardMapper.toDocument(bankCardDto)
@@ -36,6 +40,7 @@ class BankCardService(
             .map { bankCardMapper.toDto(it) }
     }
 
+    @Loggable
     @Transactional
     fun deleteById(bankCardId: Long, userId: String): Mono<Void> {
         return bankCardRepository.findById(bankCardId)
@@ -46,6 +51,7 @@ class BankCardService(
             .onErrorResume { handleDeleteError(it, bankCardId) }
     }
 
+    @Loggable
     private fun validateOwnership(cardUserId: String, userId: String): Mono<Void> {
         return Mono.defer {
             if (cardUserId != userId) {
@@ -56,6 +62,7 @@ class BankCardService(
         }
     }
 
+    @Loggable
     private fun handleDeleteError(throwable: Throwable, bankCardId: Long): Mono<Void> {
         return when (throwable) {
             is BankCardNotFoundException -> Mono.error(BankCardNotFoundException("Bank card with id = $bankCardId not found"))

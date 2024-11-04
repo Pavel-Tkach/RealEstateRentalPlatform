@@ -1,5 +1,6 @@
 package org.example.userservice.controller
 
+import org.example.userservice.aspect.Loggable
 import org.example.userservice.dto.BankCardDto
 import org.example.userservice.service.BankCardService
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -19,17 +20,21 @@ class BankCardController(
     private val bankCardService: BankCardService,
 ) {
 
+    @Loggable
     @GetMapping("/bankCards")
     fun findAll(@RequestParam userId: String): Flux<BankCardDto> = bankCardService.findAll(userId)
 
+    @Loggable
     @PostMapping("/bankCards")
     fun create(@RequestBody bankCardDto: BankCardDto,
                @RequestHeader("x-auth-user-id") userId: String,
                ): Mono<BankCardDto> = bankCardService.create(bankCardDto, userId)
 
+    @Loggable
     @PutMapping("/bankCards")
     fun update(@RequestBody bankCardDto: BankCardDto,): Mono<BankCardDto> = bankCardService.update(bankCardDto)
 
+    @Loggable
     @DeleteMapping("/bankCards/{bankCardId}")
     fun deleteById(@PathVariable bankCardId: Long,
                    @RequestHeader("x-auth-user-id") userId: String,

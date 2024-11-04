@@ -2,6 +2,7 @@ package org.example.userservice.service
 
 import kotlinx.coroutines.reactive.awaitFirstOrElse
 import kotlinx.coroutines.reactor.awaitSingle
+import org.example.userservice.aspect.Loggable
 import org.example.userservice.dto.UserDto
 import org.example.userservice.dto.UserUpdateDto
 import org.example.userservice.exception.UserNotFoundException
@@ -20,9 +21,11 @@ class UserService(
     private val userUpdateMapper: UserUpdateMapper,
 ) {
 
+    @Loggable
     fun findAll(): Flux<UserDto>  = userRepository.findAll()
         .map { userMapper.toDto(it) }
 
+    @Loggable
     suspend fun findByEmail(email: String): Mono<UserDto> {
         val user = userRepository.findByEmail(email)
             .awaitFirstOrElse { throw UserNotFoundException("User with email $email not found") }
@@ -30,6 +33,7 @@ class UserService(
         return Mono.just(userMapper.toDto(user))
     }
 
+    @Loggable
     @Transactional
     suspend fun update(userUpdateDto: UserUpdateDto,): Mono<UserUpdateDto> {
         val user = userUpdateMapper.toDocument(userUpdateDto)
@@ -38,6 +42,7 @@ class UserService(
         return Mono.just(userUpdateMapper.toDto(savedUser))
     }
 
+    @Loggable
     @Transactional
     suspend fun deleteById(id: String,) = userRepository.deleteById(id)
 }
