@@ -3,8 +3,9 @@ package org.example.bookingservice.service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.withContext
-import org.example.bookingservice.client.UserClient
+import org.example.bookingservice.aspect.Loggable
 import org.example.bookingservice.client.PropertyClient
+import org.example.bookingservice.client.UserClient
 import org.example.bookingservice.document.Booking
 import org.example.bookingservice.document.Payment
 import org.example.bookingservice.dto.BankCardDto
@@ -27,9 +28,11 @@ class PaymentService(
     private val userClient: UserClient,
 ) {
 
+    @Loggable
     suspend fun findAllByUserId(userId: String): List<PaymentDto> = paymentRepository.findAllByUserId(userId)
             .map { paymentMapper.toDto(it) }
 
+    @Loggable
     suspend fun findById(userId: String): PaymentDto {
         val payment = paymentRepository.findByUserId(userId)
             ?: throw PaymentNotFoundException("Payment for user with id $userId not found")
@@ -37,6 +40,7 @@ class PaymentService(
         return paymentMapper.toDto(payment)
     }
 
+    @Loggable
     @Transactional
     suspend fun create(bookingId: String, paymentDto: PaymentDto, userId: String,): PaymentDto {
         paymentDto.userId = userId
@@ -65,6 +69,7 @@ class PaymentService(
         return paymentMapper.toDto(savedPayment)
     }
 
+    @Loggable
     suspend fun getPriorityBankCard(paymentDto: PaymentDto,): BankCardDto {
         val userId = paymentDto.userId!!
         val bankCards = withContext(Dispatchers.IO) {
@@ -74,6 +79,7 @@ class PaymentService(
         return bankCards.first { card -> card.priority }
     }
 
+    @Loggable
     suspend fun executePaymentAndUpdateBookingStatus(priorityBankCard: BankCardDto,
                                                      booking: Booking,
                                                      paymentDto: PaymentDto,

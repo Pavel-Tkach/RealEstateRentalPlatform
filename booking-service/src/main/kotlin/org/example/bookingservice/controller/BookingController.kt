@@ -1,5 +1,6 @@
 package org.example.bookingservice.controller
 
+import org.example.bookingservice.aspect.Loggable
 import org.example.bookingservice.dto.BookingDto
 import org.example.bookingservice.dto.PaymentDto
 import org.example.bookingservice.service.BookingService
@@ -18,23 +19,28 @@ class BookingController(
     private val paymentService: PaymentService,
 ) {
 
+    @Loggable
     @GetMapping("/bookings")
     suspend fun findAllBookings(@RequestHeader("x-auth-user-id") userId: String,): List<BookingDto> = bookingService.findAllByUserId(userId)
 
+    @Loggable
     @GetMapping("/bookings/{bookingId}")
     suspend fun findBookingById(@PathVariable bookingId: String): BookingDto = bookingService.findById(bookingId)
 
+    @Loggable
     @PostMapping("/bookings")
     suspend fun createBooking(@RequestBody bookingDto: BookingDto,
                               @RequestHeader("x-auth-user-id") userId: String,
                               ): BookingDto = bookingService.create(bookingDto, userId)
 
+    @Loggable
     @PostMapping("/bookings/{bookingId}/payments")
     suspend fun makePayment(@PathVariable bookingId: String,
                             @RequestBody paymentDto: PaymentDto,
                             @RequestHeader("x-auth-user-id") userId: String,
                             ): PaymentDto = paymentService.create(bookingId, paymentDto, userId)
 
+    @Loggable
     @DeleteMapping("/bookings/{bookingId}")
     suspend fun deleteBookingById(@PathVariable bookingId: String) = bookingService.deleteById(bookingId)
 }

@@ -3,6 +3,7 @@ package org.example.bookingservice.service
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.withContext
+import org.example.bookingservice.aspect.Loggable
 import org.example.bookingservice.client.PropertyClient
 import org.example.bookingservice.document.Booking
 import org.example.bookingservice.dto.BookingDto
@@ -23,6 +24,7 @@ class BookingService(
     private val propertyClient: PropertyClient,
     ) {
 
+    @Loggable
     suspend fun findAllByUserId(userId: String,): List<BookingDto> {
         val bookingsByTenantId = bookingRepository.findAllByUserId(userId)
 
@@ -30,6 +32,7 @@ class BookingService(
             .map { booking -> bookingMapper.toDto(booking) }
     }
 
+    @Loggable
     suspend fun findById(bookingId: String,): BookingDto {
         val booking = (bookingRepository.findById(bookingId)
             ?: throw BookingNotFoundException("Booking with id $bookingId not found"))
@@ -37,6 +40,7 @@ class BookingService(
         return bookingMapper.toDto(booking)
     }
 
+    @Loggable
     @Transactional
     suspend fun create(bookingDto: BookingDto, userId: String,): BookingDto {
         bookingDto.userId = userId
@@ -56,11 +60,13 @@ class BookingService(
         return bookingMapper.toDto(savedBooking)
     }
 
+    @Loggable
     @Transactional
     suspend fun deleteById(bookingId: String,) {
         bookingRepository.deleteById(bookingId)
     }
 
+    @Loggable
     private suspend fun calculateTotalPriceForBooking(bookingDto: BookingDto, pricePerNight: BigDecimal,): BigDecimal {
         val startDate = bookingDto.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val endDate = bookingDto.endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()

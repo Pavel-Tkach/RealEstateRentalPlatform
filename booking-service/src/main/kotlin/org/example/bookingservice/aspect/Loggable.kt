@@ -1,4 +1,4 @@
-package org.example.propertyservice.aspect
+package org.example.bookingservice.aspect
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION)
