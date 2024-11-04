@@ -2,6 +2,7 @@ package org.example.propertyservice.service
 
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import org.example.propertyservice.aspect.Loggable
 import org.example.propertyservice.dto.PropertyDto
 import org.example.propertyservice.exception.IllegalRightsException
 import org.example.propertyservice.exception.PropertyNotFoundException
@@ -16,10 +17,12 @@ class PropertyService(
     private val propertyMapper: PropertyMapper,
 ) {
 
+    @Loggable
     suspend fun findAll(): List<PropertyDto> = propertyRepository.findAll()
         .map { propertyMapper.toDto(it) }
         .toList()
 
+    @Loggable
     suspend fun findById(id: String,): PropertyDto {
         val property = propertyRepository.findById(id)
             ?: throw PropertyNotFoundException("Property not found")
@@ -27,6 +30,7 @@ class PropertyService(
         return propertyMapper.toDto(property)
     }
 
+    @Loggable
     @Transactional
     suspend fun create(propertyDto: PropertyDto, userId: String,): PropertyDto {
         propertyDto.ownerId = userId
@@ -36,12 +40,14 @@ class PropertyService(
         return propertyMapper.toDto(savedProperty)
     }
 
+    @Loggable
     @Transactional
     suspend fun update(propertyDto: PropertyDto,) {
         val property = propertyMapper.toDocument(propertyDto)
         propertyRepository.save(property)
     }
 
+    @Loggable
     @Transactional
     suspend fun deleteById(id: String, userId: String,) {
         val property = propertyRepository.findById(id)
