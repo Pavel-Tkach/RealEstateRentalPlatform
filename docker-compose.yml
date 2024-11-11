@@ -9,14 +9,16 @@ services:
     ports:
       - "2701:27017"
 
-#  property-service:
-#    container_name: property-service-application
-#    build: ./property-service
-#    depends_on:
-#      - mongo-property-service
-#      - eureka-server
-#    env_file:
-#      - .env
+  property-service:
+    container_name: property-service-application
+    build: ./property-service
+    depends_on:
+      - mongo-property-service
+      - eureka-server
+#    ports:
+#      - "8080:8080"
+    env_file:
+      - .env
 
   mongo-booking-service:
     container_name: booking-service-database
@@ -26,27 +28,27 @@ services:
     ports:
       - "2702:27017"
 
-#  booking-service:
-#    container_name: booking-service-application
-#    build: ./booking-service
-#    depends_on:
-#      - mongo-booking-service
-#      - eureka-server
+  booking-service:
+    container_name: booking-service-application
+    build: ./booking-service
+    depends_on:
+      - mongo-booking-service
+      - eureka-server
 #    ports:
-#      - "8081:8080"
-#    env_file:
-#      - .env
+#      - "8081:8081"
+    env_file:
+      - .env
   
-#  user-service:
-#    container_name: user-service-application
-#    build: ./user-service
-#    depends_on:
-#      - keycloak-db
-#      - eureka-server
+  user-service:
+    container_name: user-service-application
+    build: ./user-service
+    depends_on:
+      - keycloak-db
+      - eureka-server
 #    ports:
-#      - "8082:8080"
-#    env_file:
-#      - .env
+#      - "8082:8082"
+    env_file:
+      - .env
 
   eureka-server:
     container_name: eureka-server
@@ -54,16 +56,16 @@ services:
     ports:
       - "8083:8080"
 
-#  gateway-service:
-#    container_name: gateway-service
-#    build: ./gateway-service
-#    depends_on:
-#      - eureka-server
-#      - keycloak_web
-#    ports:
-#      - "8888:8080"
-#    env_file:
-#      - .env
+  gateway-service:
+    container_name: gateway-service
+    build: ./gateway-service
+    depends_on:
+      - eureka-server
+      - keycloak_web
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
 
   keycloak_web:
     image: quay.io/keycloak/keycloak:23.0.7
