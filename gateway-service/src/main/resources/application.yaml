@@ -5,11 +5,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://keycloak_web:8080/realms/RealEstateRentalPlatform/protocol/openid-connect/certs
+          jwk-set-uri: http://keycloak:8080/realms/RealEstateRentalPlatform/protocol/openid-connect/certs
       client:
         provider:
           keycloak:
-            issuer-uri: http://keycloak_web:8080/realms/RealEstateRentalPlatform
+            issuer-uri: http://keycloak:8080/realms/RealEstateRentalPlatform
         registration:
           keycloak:
             provider: keycloak
@@ -162,8 +162,6 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8083/eureka/}
 
-server:
-  port: 8084
 logging:
   level:
     org.springframework.security: TRACE
