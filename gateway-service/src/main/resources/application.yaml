@@ -176,3 +176,5 @@ management:
         include:
           - health
           - prometheus
+server:
+  port: 8085

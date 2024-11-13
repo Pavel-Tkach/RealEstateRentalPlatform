@@ -7,14 +7,14 @@ services:
     ports:
       - "2701:27017"
 
-#  property-service:
-#    container_name: property-service-application
-#    build: ./property-service
-#    depends_on:
-#      - mongo-property-service
-#      - eureka-server
-#    env_file:
-#      - .env
+  property-service:
+      container_name: property-service-application
+      build: ./property-service
+      depends_on:
+        - mongo-property-service
+        - eureka-server
+      env_file:
+        - .env
 
   mongo-booking-service:
     container_name: booking-service-database
@@ -24,23 +24,23 @@ services:
     ports:
       - "2702:27017"
 
-#  booking-service:
-#    container_name: booking-service-application
-#    build: ./booking-service
-#    depends_on:
-#      - mongo-booking-service
-#      - eureka-server
-#    env_file:
-#      - .env
+  booking-service:
+    container_name: booking-service-application
+    build: ./booking-service
+    depends_on:
+      - mongo-booking-service
+      - eureka-server
+    env_file:
+      - .env
   
-#  user-service:
-#    container_name: user-service-application
-#    build: ./user-service
-#    depends_on:
-#      - keycloak-db
-#      - eureka-server
-#    env_file:
-#      - .env
+  user-service:
+    container_name: user-service-application
+    build: ./user-service
+    depends_on:
+      - keycloak-db
+      - eureka-server
+    env_file:
+      - .env
 
   eureka-server:
     container_name: eureka-server
@@ -56,7 +56,7 @@ services:
       - keycloak
     restart: on-failure
     ports:
-      - "8888:8888"
+      - "8085:8085"
     env_file:
       - .env
 
