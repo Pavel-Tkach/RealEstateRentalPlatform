@@ -28,13 +28,7 @@ spring:
         - id: property-get-route
           uri: lb://property-service
           predicates:
-            - Path=/properties
-            - Method=GET
-
-        - id: property-get-by-id-route
-          uri: lb://property-service
-          predicates:
-            - Path=/properties/{propertyId}
+            - Path=/properties/**
             - Method=GET
 
         - id: property-post-route
@@ -70,17 +64,7 @@ spring:
         - id: booking-get-route
           uri: lb://booking-service
           predicates:
-            - Path=/bookings
-            - Method=GET
-          filters:
-            - name: AuthFilter
-              args:
-                role: USER
-
-        - id: booking-get-by-id-route
-          uri: lb://booking-service
-          predicates:
-            - Path=/bookings/{bookingId}
+            - Path=/bookings/**
             - Method=GET
           filters:
             - name: AuthFilter
@@ -120,17 +104,7 @@ spring:
         - id: user-get-route
           uri: lb://user-service
           predicates:
-            - Path=/users
-            - Method=GET
-          filters:
-            - name: AuthFilter
-              args:
-                role: ADMIN
-
-        - id: user-get-by-email-route
-          uri: lb://user-service
-          predicates:
-            - Path=/users/search
+            - Path=/users/**
             - Method=GET
           filters:
             - name: AuthFilter
