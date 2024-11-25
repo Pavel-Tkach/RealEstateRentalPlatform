@@ -1,5 +1,6 @@
 package org.example.propertyservice.contoller
 
+import jakarta.validation.Valid
 import org.example.propertyservice.aspect.Loggable
 import org.example.propertyservice.dto.PropertyDto
 import org.example.propertyservice.service.PropertyService
@@ -27,7 +28,7 @@ class PropertyController(
 
     @Loggable
     @PostMapping("/properties")
-    suspend fun create(@RequestBody propertyDto: PropertyDto,
+    suspend fun create(@RequestBody @Valid propertyDto: PropertyDto,
                        @RequestHeader("x-auth-user-id") userId: String,
                        ): PropertyDto {
         return propertyService.create(propertyDto, userId)
@@ -35,12 +36,12 @@ class PropertyController(
 
     @Loggable
     @PutMapping("/properties")
-    suspend fun update(@RequestBody propertyDto: PropertyDto,) = propertyService.update(propertyDto)
+    suspend fun update(@RequestBody @Valid propertyDto: PropertyDto,) = propertyService.update(propertyDto)
 
     @Loggable
     @DeleteMapping("/properties/{propertyId}")
     suspend fun deleteById(@PathVariable propertyId: String,
-                           @RequestHeader("x-auth-user-id") userId: String, ) {
+                           @RequestHeader("x-auth-user-id") userId: String,) {
         propertyService.deleteById(propertyId, userId)
     }
 }

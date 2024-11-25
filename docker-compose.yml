@@ -13,8 +13,6 @@ services:
       depends_on:
         - mongo-property-service
         - eureka-server
-#      ports:
-#        - "8880:8880"
       env_file:
         - .env
 
@@ -32,8 +30,6 @@ services:
     depends_on:
       - mongo-booking-service
       - eureka-server
-#    ports:
-#      - "8881:8881"
     env_file:
       - .env
   
@@ -43,8 +39,6 @@ services:
     depends_on:
       - keycloak-db
       - eureka-server
-#    ports:
-#      - "8882:8882"
     env_file:
       - .env
 
@@ -74,6 +68,7 @@ services:
       KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: 1234
+
       KC_HEALTH_ENABLED: true
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
