@@ -1,8 +1,13 @@
 package org.example.propertyservice.service
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.withContext
 import org.example.propertyservice.aspect.Loggable
+import org.example.propertyservice.client.RecommendationClient
+import org.example.propertyservice.dto.FilterDto
 import org.example.propertyservice.dto.PropertyDto
 import org.example.propertyservice.exception.IllegalRightsException
 import org.example.propertyservice.exception.PropertyNotFoundException
@@ -15,12 +20,29 @@ import org.springframework.transaction.annotation.Transactional
 class PropertyService(
     private val propertyRepository: PropertyRepository,
     private val propertyMapper: PropertyMapper,
+    private val recommendationClient: RecommendationClient,
 ) {
 
     @Loggable
     suspend fun findAll(): List<PropertyDto> = propertyRepository.findAll()
         .map { propertyMapper.toDto(it) }
         .toList()
+
+    @Loggable
+    suspend fun getRecommendations(filterDto: FilterDto): List<PropertyDto> {
+        val properties = propertyRepository.findAll()
+        val propertiesDto = properties
+            .map { propertyMapper.toDto(it) }
+            .toList()
+        filterDto.propertiesDtos = propertiesDto
+
+        val dto = withContext(Dispatchers.IO) {
+            recommendationClient.getRecommendations(filterDto)
+                .awaitSingle()
+        }
+
+        return dto.propertiesDtos!!
+    }
 
     @Loggable
     suspend fun findById(id: String,): PropertyDto {

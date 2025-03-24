@@ -2,6 +2,7 @@ package org.example.propertyservice.contoller
 
 import jakarta.validation.Valid
 import org.example.propertyservice.aspect.Loggable
+import org.example.propertyservice.dto.FilterDto
 import org.example.propertyservice.dto.PropertyDto
 import org.example.propertyservice.service.PropertyService
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,6 +22,12 @@ class PropertyController(
     @Loggable
     @GetMapping("/properties")
     suspend fun findAll(): List<PropertyDto> = propertyService.findAll()
+
+    @Loggable
+    @GetMapping("/properties/recommendations")
+    suspend fun findAllRecommendations(@RequestBody filterDto: FilterDto): List<PropertyDto> {
+        return propertyService.getRecommendations(filterDto)
+    }
 
     @Loggable
     @GetMapping("/properties/{propertyId}")

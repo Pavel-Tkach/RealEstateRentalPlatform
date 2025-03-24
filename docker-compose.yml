@@ -90,6 +90,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
 
+  recommendation-service:
+    container_name: recommendation-service
+    build: ./recommendation-service
+    env_file:
+      - .env
+
 #  prometheus:
 #    image: prom/prometheus:v2.44.0
 #    container_name: prometheus
