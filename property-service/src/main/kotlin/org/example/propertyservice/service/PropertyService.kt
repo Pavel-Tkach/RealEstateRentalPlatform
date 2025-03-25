@@ -36,12 +36,11 @@ class PropertyService(
             .toList()
         filterDto.propertiesDtos = propertiesDto
 
-        val dto = withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             recommendationClient.getRecommendations(filterDto)
+                .collectList()
                 .awaitSingle()
         }
-
-        return dto.propertiesDtos!!
     }
 
     @Loggable
