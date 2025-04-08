@@ -7,7 +7,8 @@ data class FilterDto(
     val title: String?,
     val type: Property.PropertyType?,
     val locationDto: LocationDto?,
-    val pricePerNight: BigDecimal?,
+    val startPricePerNight: BigDecimal?,
+    val endPricePerNight: BigDecimal?,
     val free: Boolean?,
     var propertiesDtos: List<PropertyDto>?,
 )

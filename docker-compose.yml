@@ -6,6 +6,8 @@ services:
       MONGO_INITDB_DATABASE: property-db
     ports:
       - "2701:27017"
+    volumes:
+      - ./property-service/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
 
   property-service:
       container_name: property-service-application
