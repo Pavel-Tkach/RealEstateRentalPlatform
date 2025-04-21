@@ -31,6 +31,12 @@ spring:
             - Path=/properties/**
             - Method=GET
 
+        - id: property-get-recommendations-route
+          uri: lb://property-service
+          predicates:
+            - Path=/properties/recommendations
+            - Method=POST
+
         - id: property-post-route
           uri: lb://property-service
           predicates:

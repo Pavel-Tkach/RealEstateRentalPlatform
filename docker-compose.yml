@@ -98,6 +98,12 @@ services:
     env_file:
       - .env
 
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
 #  prometheus:
 #    image: prom/prometheus:v2.44.0
 #    container_name: prometheus

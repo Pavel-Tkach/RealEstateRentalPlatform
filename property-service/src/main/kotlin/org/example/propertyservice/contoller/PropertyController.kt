@@ -24,7 +24,7 @@ class PropertyController(
     suspend fun findAll(): List<PropertyDto> = propertyService.findAll()
 
     @Loggable
-    @GetMapping("/properties/recommendations")
+    @PostMapping("/properties/recommendations")
     suspend fun findAllRecommendations(@RequestBody filterDto: FilterDto): List<PropertyDto> {
         return propertyService.getRecommendations(filterDto)
     }

@@ -1,38 +1,104 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Мой проект на Bootstrap</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RealEstateRentalPlatform</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Свои стили -->
-    <link href="css/custom.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/home.css" rel="stylesheet" />
 </head>
 
-<body class="bg-light">
-
-<div class="container py-5">
-    <h1 class="text-center mb-4">Добро пожаловать!</h1>
-
-    <div class="text-center">
-        <button class="btn btn-primary" id="loginBtn">Войти через Keycloak</button>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="#">RealEstateRentalPlatform</a>
+        <div class="ms-auto">
+            <a href="/login" class="btn btn-outline-primary">Login</a>
+        </div>
     </div>
+</nav>
 
-    <div id="userInfo" class="mt-5 d-none">
-        <h3>Информация о пользователе</h3>
-        <pre id="userDetails"></pre>
-        <button class="btn btn-danger mt-3" id="logoutBtn">Выйти</button>
+<body class="bg-light">
+<div class="container-fluid py-5">
+    <div class="row">
+        <!-- Фильтры -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Filters</h5>
+                </div>
+                <div class="card-body">
+                    <form id="filterForm">
+                        <div class="mb-3">
+                            <label for="titleFilter" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="titleFilter" placeholder="Property title...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="typeFilter" class="form-label">Type</label>
+                            <select class="form-select" id="typeFilter">
+                                <option value="">Any type</option>
+                                <option value="APARTMENT">Apartment</option>
+                                <option value="HOUSE">House</option>
+                                <option value="OFFICE">Office</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control mb-2" id="addressFilter" placeholder="Address...">
+                            <input type="text" class="form-control mb-2" id="cityFilter" placeholder="City...">
+                            <input type="text" class="form-control mb-2" id="stateFilter" placeholder="State...">
+                            <input type="text" class="form-control" id="countryFilter" placeholder="Country...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Price per night</label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="startPriceFilter" placeholder="From">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="endPriceFilter" placeholder="To">
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="availableFilter">
+                            <label class="form-check-label" for="availableFilter">
+                                Available only
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        <button type="reset" class="btn btn-outline-secondary w-100 mt-2">Reset</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Список недвижимости -->
+        <div class="col-md-9">
+            <h1 class="text-center mb-4">Available Properties</h1>
+            <div id="propertyList" class="row g-4"></div>
+        </div>
     </div>
 </div>
 
-<!-- Bootstrap JS (если нужны модалки и пр.) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="propertyDetails" aria-labelledby="propertyDetailsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="propertyDetailsLabel">Property Details</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" id="propertyDetailsContent">
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Свои скрипты -->
-<script src="js/scripts.js"></script>
-
+<script src="js/home.js"></script>
 </body>
 </html>

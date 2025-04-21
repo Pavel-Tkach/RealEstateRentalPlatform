@@ -1,0 +1,44 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+h1 {
+    font-weight: 600;
+}
+
+.card {
+    border-radius: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.card .card-text {
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.6em;
+}
+
+@media (max-width: 576px) {
+    .card .card-text {
+        font-size: 0.9rem;
+    }
+
+    .card .card-title {
+        font-size: 1.1rem;
+    }
+}
