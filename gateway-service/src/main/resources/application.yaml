@@ -5,11 +5,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://keycloak:8080/realms/RealEstateRentalPlatform/protocol/openid-connect/certs
+          jwk-set-uri: http://host.docker.internal:10000/realms/RealEstateRentalPlatform/protocol/openid-connect/certs
       client:
         provider:
           keycloak:
-            issuer-uri: http://keycloak:8080/realms/RealEstateRentalPlatform
+            issuer-uri: http://host.docker.internal:10000/realms/RealEstateRentalPlatform
         registration:
           keycloak:
             provider: keycloak
