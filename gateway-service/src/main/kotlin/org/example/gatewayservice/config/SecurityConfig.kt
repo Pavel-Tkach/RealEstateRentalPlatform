@@ -26,6 +26,7 @@ class SecurityConfig {
             .authorizeExchange { exchange ->
                 exchange
                     .pathMatchers("/eureka/**").permitAll()
+                    .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .pathMatchers(HttpMethod.GET, "/properties/**").permitAll()
                     .pathMatchers(HttpMethod.POST, "/properties/recommendations").permitAll()
                     .anyExchange().authenticated()
