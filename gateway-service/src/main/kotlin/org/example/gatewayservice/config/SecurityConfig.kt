@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter
 import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler
+import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.reactive.CorsWebFilter
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
@@ -35,7 +37,9 @@ class SecurityConfig {
                 resource.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) }
             }
             .cors(Customizer.withDefaults())
-            .oauth2Login(Customizer.withDefaults())
+            .oauth2Login { oauth2 ->
+                oauth2.authenticationSuccessHandler(authenticationSuccessHandler())
+            }
 
         return http.build()
     }
@@ -54,6 +58,10 @@ class SecurityConfig {
         return CorsWebFilter(source)
     }
 
+    @Bean
+    fun authenticationSuccessHandler(): ServerAuthenticationSuccessHandler {
+        return RedirectServerAuthenticationSuccessHandler("http://localhost/")
+    }
 
     private fun jwtAuthenticationConverter(): (Jwt) -> Mono<AbstractAuthenticationToken>? {
         return { jwt ->
