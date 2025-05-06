@@ -116,12 +116,22 @@ spring:
         - id: user-get-route
           uri: lb://user-service
           predicates:
-            - Path=/users/**
+            - Path=/users
             - Method=GET
           filters:
             - name: AuthFilter
               args:
                 role: ADMIN
+
+        - id: user-get-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users/search
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
 
         - id: user-put-route
           uri: lb://user-service

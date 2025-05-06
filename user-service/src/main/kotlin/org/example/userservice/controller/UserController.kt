@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 @RestController
 class UserController(
@@ -21,15 +19,15 @@ class UserController(
 
     @Loggable
     @GetMapping("/users")
-    suspend fun findAll(): Flux<UserDto> = userService.findAll()
+    suspend fun findAll(): List<UserDto> = userService.findAll()
 
     @Loggable
     @GetMapping("/users/search")
-    suspend fun findByEmail(@RequestParam email: String): Mono<UserDto> = userService.findByEmail(email)
+    suspend fun findByEmail(@RequestParam email: String): UserDto = userService.findByEmail(email)
 
     @Loggable
     @PutMapping("/users")
-    suspend fun update(@RequestBody userUpdateDto: UserUpdateDto,): Mono<UserUpdateDto> = userService.update(userUpdateDto)
+    suspend fun update(@RequestBody userUpdateDto: UserUpdateDto,): UserUpdateDto = userService.update(userUpdateDto)
 
     @Loggable
     @DeleteMapping("/users/{userId}")

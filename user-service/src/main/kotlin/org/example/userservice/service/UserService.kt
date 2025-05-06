@@ -11,8 +11,6 @@ import org.example.userservice.mapper.UserUpdateMapper
 import org.example.userservice.repository.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 @Service
 class UserService(
@@ -22,24 +20,26 @@ class UserService(
 ) {
 
     @Loggable
-    fun findAll(): Flux<UserDto>  = userRepository.findAll()
+    suspend fun findAll(): List<UserDto>  = userRepository.findAll()
         .map { userMapper.toDto(it) }
+        .collectList()
+        .awaitSingle()
 
     @Loggable
-    suspend fun findByEmail(email: String): Mono<UserDto> {
+    suspend fun findByEmail(email: String): UserDto {
         val user = userRepository.findByEmail(email)
             .awaitFirstOrElse { throw UserNotFoundException("User with email $email not found") }
 
-        return Mono.just(userMapper.toDto(user))
+        return userMapper.toDto(user)
     }
 
     @Loggable
     @Transactional
-    suspend fun update(userUpdateDto: UserUpdateDto,): Mono<UserUpdateDto> {
+    suspend fun update(userUpdateDto: UserUpdateDto,): UserUpdateDto {
         val user = userUpdateMapper.toDocument(userUpdateDto)
         val savedUser = userRepository.save(user).awaitSingle()
 
-        return Mono.just(userUpdateMapper.toDto(savedUser))
+        return userUpdateMapper.toDto(savedUser)
     }
 
     @Loggable
