@@ -143,6 +143,11 @@ function showPropertyDetails(property) {
     offcanvas.show();
 }
 
+function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Загружаем все свойства при загрузке страницы
     fetchProperties();
