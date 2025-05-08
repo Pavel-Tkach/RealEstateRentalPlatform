@@ -1,0 +1,54 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.navbar {
+    color: #212529;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #212529;
+}
+
+#userInfo {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #212529;
+}
+
+.nav-tabs .nav-link {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #212529;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    border-color: #0d6efd #0d6efd #fff;
+}
+
+.tab-tile {
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+    border: 1px solid #dee2e6;
+}
+
+.tab-tile:hover {
+    background-color: #e2e6ea;
+}
+
+.tab-tile.active {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.tab-content-box {
+    transition: opacity 0.3s ease;
+}
+

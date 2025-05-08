@@ -19,16 +19,39 @@ document.addEventListener('DOMContentLoaded', () => {
             return res.json();
         })
         .then(user => {
-            document.getElementById('profileContent').innerHTML = `
-            <h5>Welcome, ${user.firstname || ''} ${user.lastname || ''}</h5>
-            <p><strong>Email:</strong> ${user.email}</p>
-            <p><strong>User ID:</strong> ${user.id}</p>
-        `;
+            const userInfo = document.getElementById('userInfo');
+            userInfo.textContent = `${user.firstname || ''} ${user.lastname || ''}`;
         })
         .catch(err => {
-            console.error('Error loading profile:', err);
-            document.getElementById('profileContent').innerHTML = `
-            <div class="alert alert-danger">Unable to load profile information.</div>
-        `;
+            console.error('Error loading user info:', err);
         });
+
+    const tabs = {
+        tabBookings: {
+            button: document.getElementById('tabBookings'),
+            content: document.getElementById('bookingsContent')
+        },
+        tabPayments: {
+            button: document.getElementById('tabPayments'),
+            content: document.getElementById('paymentsContent')
+        },
+        tabCards: {
+            button: document.getElementById('tabCards'),
+            content: document.getElementById('cardsContent')
+        }
+    };
+
+    Object.values(tabs).forEach(tab => {
+        tab.button.addEventListener('click', () => {
+            // Убрать active и скрыть контент
+            Object.values(tabs).forEach(t => {
+                t.button.classList.remove('active');
+                t.content.classList.add('d-none');
+            });
+
+            // Установить активную вкладку и показать её контент
+            tab.button.classList.add('active');
+            tab.content.classList.remove('d-none');
+        });
+    });
 });
