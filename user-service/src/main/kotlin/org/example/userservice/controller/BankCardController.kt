@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -22,7 +21,7 @@ class BankCardController(
 
     @Loggable
     @GetMapping("/bankCards")
-    fun findAll(@RequestParam userId: String): Flux<BankCardDto> = bankCardService.findAll(userId)
+    fun findAll(@RequestHeader("x-auth-user-id") userId: String): Flux<BankCardDto> = bankCardService.findAll(userId)
 
     @Loggable
     @PostMapping("/bankCards")

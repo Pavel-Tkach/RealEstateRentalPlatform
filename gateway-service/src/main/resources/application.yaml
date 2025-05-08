@@ -83,6 +83,16 @@ spring:
               args:
                 role: USER
 
+        - id: payments-get-route
+          uri: lb://booking-service
+          predicates:
+            - Path=/payments
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
         - id: booking-post-route
           uri: lb://booking-service
           predicates:
@@ -152,6 +162,16 @@ spring:
             - name: AuthFilter
               args:
                 role: ADMIN
+
+        - id: bank-cards-get-route
+          uri: lb://user-service
+          predicates:
+            - Path=/bankCards
+            - Method=GET
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
 
 eureka:
   client:
