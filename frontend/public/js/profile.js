@@ -47,19 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Переключение вкладок и загрузка данных
     Object.values(tabs).forEach(tab => {
         tab.button.addEventListener('click', () => {
-            // Активная вкладка
+            // Скрываем все вкладки
             Object.values(tabs).forEach(t => {
                 t.button.classList.remove('active');
                 t.content.classList.add('d-none');
             });
 
+            // Показываем текущую вкладку
             tab.button.classList.add('active');
             tab.content.classList.remove('d-none');
 
-            // Загрузка данных
+            // Загружаем данные
             fetch(tab.endpoint, {
                 method: 'GET',
                 headers: {
@@ -119,16 +119,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         container.innerHTML = data.map(card => `
-            <div class="card p-3 mb-3 shadow-sm">
+            <div class="card p-3 mb-3 shadow-sm position-relative" data-card-id="${card.id}">
                 <p><strong>Card Number:</strong> ${card.number}</p>
                 <p><strong>Expiry Date:</strong> ${new Date(card.expiryDate).toLocaleDateString()}</p>
                 <p><strong>Card Type:</strong> ${card.cardType}</p>
                 <p><strong>Balance:</strong> ${card.balance} USD</p>
                 <p><strong>Priority:</strong> ${card.priority ? 'Yes' : 'No'}</p>
+                <button class="btn btn-danger btn-sm position-absolute bottom-0 end-0 m-3 delete-card-btn">Delete</button>
             </div>
         `).join('');
+
+        // Обработчики на кнопки удаления
+        container.querySelectorAll('.delete-card-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const cardElement = this.closest('[data-card-id]');
+                const cardId = cardElement.getAttribute('data-card-id');
+                if (confirm('Are you sure you want to delete this card?')) {
+                    deleteCard(cardId, container);
+                }
+            });
+        });
     }
 
-    // Инициировать первую вкладку при загрузке
+    function deleteCard(cardId, container) {
+        fetch(`http://localhost:8085/bankCards/${cardId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to delete card');
+                return fetch('http://localhost:8085/bankCards', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            })
+            .then(res => res.json())
+            .then(data => {
+                renderCards(container, data);
+            })
+            .catch(err => {
+                console.error('Error deleting card:', err);
+                alert('Failed to delete the card.');
+            });
+    }
+
+    // Запускаем первую вкладку по умолчанию
     tabs.tabBookings.button.click();
 });

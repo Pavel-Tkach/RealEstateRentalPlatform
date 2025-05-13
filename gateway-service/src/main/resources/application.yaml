@@ -173,6 +173,16 @@ spring:
               args:
                 role: USER
 
+        - id: bank-cards-delete-route
+          uri: lb://user-service
+          predicates:
+            - Path=/bankCards/{bankCardId}
+            - Method=DELETE
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
 eureka:
   client:
     service-url:
