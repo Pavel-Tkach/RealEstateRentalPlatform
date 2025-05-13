@@ -52,3 +52,6 @@ body {
     transition: opacity 0.3s ease;
 }
 
+html, body {
+    height: 100%;
+}

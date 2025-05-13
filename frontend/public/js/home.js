@@ -149,10 +149,9 @@ function getAuthHeaders() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Загружаем все свойства при загрузке страницы
+
     fetchProperties();
 
-    // Обработчик формы фильтров
     const filterForm = document.getElementById('filterForm');
     filterForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -161,7 +160,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обработчик сброса фильтров
     filterForm.addEventListener('reset', () => {
-        // После сброса загружаем все свойства снова
         fetchProperties();
     });
+
+    const addBtn = document.getElementById('addPropertyBtn');
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
+    if (token && email) {
+        addBtn.classList.remove('d-none');
+
+        addBtn.addEventListener('click', () => {
+            const canvas = new bootstrap.Offcanvas('#addPropertyCanvas');
+            canvas.show();
+        });
+
+        document.getElementById('propertyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const newProperty = {
+                title: document.getElementById('propertyTitle').value,
+                description: document.getElementById('propertyDescription').value,
+                type: document.getElementById('propertyType').value,
+                locationDto: {
+                    address: document.getElementById('locationAddress').value,
+                    city: document.getElementById('locationCity').value,
+                    state: document.getElementById('locationState').value,
+                    country: document.getElementById('locationCountry').value
+                },
+                pricePerNight: parseFloat(document.getElementById('pricePerNight').value),
+                free: true,
+                ownerId: null // будет установлен на бэке через токен
+            };
+
+            try {
+                const response = await fetch('http://localhost:8085/properties', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(newProperty)
+                });
+
+                if (!response.ok) throw new Error('Failed to save property');
+
+                alert('Property created successfully!');
+                document.getElementById('propertyForm').reset();
+                bootstrap.Offcanvas.getInstance(document.getElementById('addPropertyCanvas')).hide();
+                fetchProperties(); // Обновим список
+            } catch (err) {
+                console.error(err);
+                alert('Error creating property. Check your input and try again.');
+            }
+        });
+    }
 });

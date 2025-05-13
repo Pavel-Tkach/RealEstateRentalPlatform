@@ -42,3 +42,13 @@ h1 {
         font-size: 1.1rem;
     }
 }
+
+.floating-add-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1050;
+    padding: 1rem 1.5rem;
+    font-size: 1.25rem;
+    border-radius: 0.75rem;
+}

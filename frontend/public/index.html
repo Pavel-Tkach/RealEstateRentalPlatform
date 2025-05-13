@@ -94,6 +94,51 @@
     </div>
 </div>
 
+<button id="addPropertyBtn" class="btn btn-success floating-add-btn d-none">
+    + Add Property
+</button>
+
+<!-- Offcanvas Form -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="addPropertyCanvas" aria-labelledby="addPropertyLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="addPropertyLabel">Create New Property</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form id="propertyForm">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" id="propertyTitle" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" id="propertyDescription" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Type</label>
+                <select class="form-select" id="propertyType" required>
+                    <option value="">Select type</option>
+                    <option value="APARTMENT">Apartment</option>
+                    <option value="HOUSE">House</option>
+                    <option value="OFFICE">Office</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Location</label>
+                <input type="text" class="form-control mb-2" id="locationAddress" placeholder="Address" required>
+                <input type="text" class="form-control mb-2" id="locationCity" placeholder="City" required>
+                <input type="text" class="form-control mb-2" id="locationState" placeholder="State" required>
+                <input type="text" class="form-control" id="locationCountry" placeholder="Country" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price per Night ($)</label>
+                <input type="number" class="form-control" id="pricePerNight" min="0" step="0.01" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Save Property</button>
+        </form>
+    </div>
+</div>
+
 <footer class="custom-footer mt-auto py-4 text-center text-white">
     <div class="container">
         <p class="mb-1">&copy; 2025 RealEstateRentalPlatform. All rights reserved.</p>
