@@ -54,9 +54,66 @@
             </div>
         </div>
         <div id="cardsContent" class="tab-content-box d-none">
-            <div class="card p-4 shadow-sm">
-                <h5>Your saved cards will be shown here.</h5>
+            <div class="mb-3 text-end">
+                <button class="btn btn-success" id="addCardBtn" data-bs-toggle="modal" data-bs-target="#addCardModal">Add Card</button>
             </div>
+            <div id="cardsList">
+                <div class="card p-4 shadow-sm">
+                    <h5>Your saved cards will be shown here.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Card Modal -->
+<div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="addCardForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCardModalLabel">Add New Card</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="expiryDate" class="form-label">Expiry Date</label>
+                        <input type="date" class="form-control" id="expiryDate" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cardType" class="form-label">Card Type</label>
+                        <select class="form-select" id="cardType" required>
+                            <option value="" selected disabled>Select card type</option>
+                            <option value="VISA">VISA</option>
+                            <option value="MASTERCARD">MASTERCARD</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cvc" class="form-label">CVC</label>
+                        <input type="text" class="form-control" id="cvc" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="balance" class="form-label">Balance (USD)</label>
+                        <input type="number" class="form-control" id="balance" min="0" step="0.01" required>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="priority">
+                        <label class="form-check-label" for="priority">Set as priority card</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Card</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

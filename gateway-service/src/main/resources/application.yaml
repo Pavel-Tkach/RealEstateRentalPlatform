@@ -183,6 +183,16 @@ spring:
               args:
                 role: USER
 
+        - id: bank-cards-create-route
+          uri: lb://user-service
+          predicates:
+            - Path=/bankCards
+            - Method=POST
+          filters:
+            - name: AuthFilter
+              args:
+                role: USER
+
 eureka:
   client:
     service-url:

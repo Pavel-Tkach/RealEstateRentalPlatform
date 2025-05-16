@@ -113,24 +113,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderCards(container, data) {
+        // Получаем контейнер списка карт внутри cardsContent
+        const listContainer = container.querySelector('#cardsList');
+
         if (!data.length) {
-            container.innerHTML = `<div class="card p-4 shadow-sm"><h5>No cards found.</h5></div>`;
+            listContainer.innerHTML = `<div class="card p-4 shadow-sm"><h5>No cards found.</h5></div>`;
             return;
         }
 
-        container.innerHTML = data.map(card => `
-            <div class="card p-3 mb-3 shadow-sm position-relative" data-card-id="${card.id}">
-                <p><strong>Card Number:</strong> ${card.number}</p>
-                <p><strong>Expiry Date:</strong> ${new Date(card.expiryDate).toLocaleDateString()}</p>
-                <p><strong>Card Type:</strong> ${card.cardType}</p>
-                <p><strong>Balance:</strong> ${card.balance} USD</p>
-                <p><strong>Priority:</strong> ${card.priority ? 'Yes' : 'No'}</p>
-                <button class="btn btn-danger btn-sm position-absolute bottom-0 end-0 m-3 delete-card-btn">Delete</button>
-            </div>
-        `).join('');
+        listContainer.innerHTML = data.map(card => `
+        <div class="card p-3 mb-3 shadow-sm position-relative" data-card-id="${card.id}">
+            <p><strong>Card Number:</strong> ${card.number}</p>
+            <p><strong>Expiry Date:</strong> ${new Date(card.expiryDate).toLocaleDateString()}</p>
+            <p><strong>Card Type:</strong> ${card.cardType}</p>
+            <p><strong>Balance:</strong> ${card.balance} USD</p>
+            <p><strong>Priority:</strong> ${card.priority ? 'Yes' : 'No'}</p>
+            <button class="btn btn-danger btn-sm position-absolute bottom-0 end-0 m-3 delete-card-btn">Delete</button>
+        </div>
+    `).join('');
 
-        // Обработчики на кнопки удаления
-        container.querySelectorAll('.delete-card-btn').forEach(button => {
+        // Назначаем обработчики кнопкам удаления
+        listContainer.querySelectorAll('.delete-card-btn').forEach(button => {
             button.addEventListener('click', function () {
                 const cardElement = this.closest('[data-card-id]');
                 const cardId = cardElement.getAttribute('data-card-id');
@@ -165,6 +168,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Failed to delete the card.');
             });
     }
+
+    const addCardForm = document.getElementById('addCardForm');
+    const addCardModal = new bootstrap.Modal(document.getElementById('addCardModal'));
+
+    document.getElementById('addCardBtn').addEventListener('click', () => {
+        addCardForm.reset();
+        addCardModal.show();
+    });
+
+    addCardForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const newCard = {
+            id: null,
+            number: document.getElementById('cardNumber').value,
+            expiryDate: new Date(document.getElementById('expiryDate').value).toISOString(),
+            cardType: document.getElementById('cardType').value,
+            cvc: document.getElementById('cvc').value,
+            balance: parseFloat(document.getElementById('balance').value),
+            priority: document.getElementById('priority').checked
+        };
+
+        fetch('http://localhost:8085/bankCards', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newCard)
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to add card');
+                return res.json();
+            })
+            .then(() => {
+                addCardModal.hide();
+                return fetch('http://localhost:8085/bankCards', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            })
+            .then(res => res.json())
+            .then(data => {
+                renderCards(document.getElementById('cardsContent'), data);
+            })
+            .catch(err => {
+                console.error('Error adding card:', err);
+                alert('Failed to add card');
+            });
+    });
+
 
     // Запускаем первую вкладку по умолчанию
     tabs.tabBookings.button.click();
