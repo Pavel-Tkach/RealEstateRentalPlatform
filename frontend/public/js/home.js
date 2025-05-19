@@ -71,12 +71,26 @@ function displayProperties(properties) {
         return;
     }
 
-    properties.forEach(property => {
+    // Примерные изображения для 7 карточек
+    const imageUrls = [
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
+    ];
+
+    properties.forEach((property, index) => {
+        const imageUrl = imageUrls[index % imageUrls.length]; // зацикливаем если больше 7
         const card = document.createElement('div');
         card.className = 'col-md-6 col-lg-4';
 
         card.innerHTML = `
         <div class="card h-100 shadow-sm property-card position-relative" style="cursor: pointer;">
+            <img src="${imageUrl}" class="card-img-top" alt="${property.title}">
             <div class="card-body d-flex flex-column justify-content-between">
                 <div>
                     <h5 class="card-title">${property.title}</h5>
