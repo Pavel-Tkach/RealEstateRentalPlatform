@@ -71,7 +71,6 @@ function displayProperties(properties) {
         return;
     }
 
-    // Примерные изображения для 7 карточек
     const imageUrls = [
         "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80",
@@ -84,7 +83,7 @@ function displayProperties(properties) {
     ];
 
     properties.forEach((property, index) => {
-        const imageUrl = imageUrls[index % imageUrls.length]; // зацикливаем если больше 7
+        const imageUrl = imageUrls[index % imageUrls.length];
         const card = document.createElement('div');
         card.className = 'col-md-6 col-lg-4';
 
@@ -124,12 +123,29 @@ function displayProperties(properties) {
             showPropertyDetails(property);
         });
 
-        // Prevent book/delete clicks from bubbling
+        // Book button click opens booking modal
         const bookButton = card.querySelector('.book-btn');
         if (property.free) {
             bookButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                alert(`You have booked: ${property.title}`);
+
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert("You must be logged in to book a property.");
+                    return;
+                }
+
+                // Открываем модальное окно бронирования
+                const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+
+                // Заполняем скрытое поле id свойства
+                document.getElementById('bookingPropertyId').value = property.id;
+
+                // Сбрасываем даты
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+
+                bookingModal.show();
             });
         }
 
@@ -257,4 +273,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Обработчик отправки формы бронирования
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("You must be logged in to book a property.");
+            return;
+        }
+
+        const propertyId = document.getElementById('bookingPropertyId').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (!startDate || !endDate || new Date(endDate) <= new Date(startDate)) {
+            alert('Please select valid start and end dates.');
+            return;
+        }
+
+        const bookingDto = {
+            propertyId: propertyId,
+            startDate: new Date(startDate).toISOString(),
+            endDate: new Date(endDate).toISOString(),
+        };
+
+        try {
+            const response = await fetch('http://localhost:8085/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bookingDto)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to create booking');
+            }
+
+            alert('Booking successfully created!');
+            bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
+
+            fetchProperties();
+        } catch (error) {
+            alert('Error during booking: ' + error.message);
+        }
+    });
 });
