@@ -87,14 +87,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         container.innerHTML = data.map(booking => `
-            <div class="card p-3 mb-3 shadow-sm">
-                <p><strong>Property ID:</strong> ${booking.propertyId}</p>
-                <p><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</p>
-                <p><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</p>
-                <p><strong>Total Price:</strong> ${booking.totalPrice} USD</p>
-                <p><strong>Status:</strong> ${booking.status}</p>
-            </div>
-        `).join('');
+        <div class="card p-3 mb-3 shadow-sm" data-booking-id="${booking.id}">
+            <p><strong>Property ID:</strong> ${booking.propertyId}</p>
+            <p><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</p>
+            <p><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</p>
+            <p><strong>Total Price:</strong> ${booking.totalPrice} USD</p>
+            <p><strong>Status:</strong> ${booking.status}</p>
+            ${booking.status === 'AWAIT_PAYMENT' ? `<button class="btn btn-primary pay-btn">Pay</button>` : ''}
+        </div>
+    `).join('');
+
+        // Назначаем обработчики кнопкам оплаты
+        container.querySelectorAll('.pay-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const bookingCard = this.closest('[data-booking-id]');
+                const bookingId = bookingCard.getAttribute('data-booking-id');
+                payForBooking(bookingId);
+            });
+        });
     }
 
     function renderPayments(container, data) {
@@ -142,6 +152,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+    }
+
+    function payForBooking(bookingId) {
+        fetch(`http://localhost:8085/bookings/${bookingId}/payments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({}) // Пустой DTO, как указано
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to process payment');
+                alert('Payment successful!');
+                // Обновим список бронирований
+                return fetch('http://localhost:8085/bookings', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            })
+            .then(res => res.json())
+            .then(data => {
+                renderBookings(document.getElementById('bookingsContent'), data);
+            })
+            .catch(err => {
+                console.error('Error during payment:', err);
+                alert('Failed to process payment.');
+            });
     }
 
     function deleteCard(cardId, container) {

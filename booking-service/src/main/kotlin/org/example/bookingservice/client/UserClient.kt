@@ -4,7 +4,7 @@ import org.example.bookingservice.dto.BankCardDto
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestHeader
 import reactivefeign.spring.config.ReactiveFeignClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 interface UserClient {
 
     @GetMapping("/bankCards")
-    fun findAll(@RequestParam userId: String): Flux<BankCardDto>
+    fun findAll(@RequestHeader("x-auth-user-id") userId: String): Flux<BankCardDto>
 
     @PutMapping("/bankCards")
     fun update(@RequestBody bankCardDto: BankCardDto): Mono<Void>
